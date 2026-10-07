@@ -331,7 +331,6 @@ button:active{
 
 <body>
 
-<!-- HOME -->
 <section id="homeScreen" class="screen active">
   <div class="title">🏁 TrackForge Racing</div>
   <div class="subtitle">
@@ -354,7 +353,6 @@ button:active{
 </section>
 
 
-<!-- GARAGE -->
 <section id="garageScreen" class="screen">
   <button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
   <div class="title">🚗 Garage</div>
@@ -364,7 +362,6 @@ button:active{
 </section>
 
 
-<!-- DRAW -->
 <section id="drawScreen" class="screen">
 
   <div class="drawTop">
@@ -392,7 +389,6 @@ button:active{
 </section>
 
 
-<!-- TRACKS -->
 <section id="tracksScreen" class="screen">
   <button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
   <div class="title">🏁 Meine Strecken</div>
@@ -400,7 +396,6 @@ button:active{
 </section>
 
 
-<!-- WEEKEND -->
 <section id="weekendScreen" class="screen">
   <button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
   <div class="title">🏆 Rennwochenende</div>
@@ -424,7 +419,6 @@ button:active{
 </section>
 
 
-<!-- GAME -->
 <section id="gameScreen" class="screen">
 
   <canvas id="gameCanvas"></canvas>
@@ -460,7 +454,6 @@ button:active{
 </section>
 
 
-<!-- RESULT -->
 <section id="resultScreen" class="screen">
   <div class="title">🏁 Ziel!</div>
   <div id="resultPosition" class="resultPos">1.</div>
@@ -478,9 +471,6 @@ button:active{
 
 
 <script>
-/* =========================================================
-   GRUNDWERTE
-========================================================= */
 
 const drawCanvas = document.getElementById("drawCanvas");
 const dctx = drawCanvas.getContext("2d");
@@ -551,10 +541,6 @@ const cars = [
 ];
 
 
-/* =========================================================
-   HILFSFUNKTIONEN
-========================================================= */
-
 function clamp(v,a,b){
   return Math.max(a,Math.min(b,v));
 }
@@ -585,10 +571,6 @@ function showScreen(id){
   document.getElementById(id).classList.add("active");
 }
 
-
-/* =========================================================
-   GARAGE
-========================================================= */
 
 function openGarage(){
 
@@ -636,16 +618,9 @@ function openGarage(){
 }
 
 
-/* =========================================================
-   DRAW CANVAS
-========================================================= */
-
 function resizeDrawCanvas(){
 
   const rect=drawCanvas.getBoundingClientRect();
-
-  const oldW=drawCanvas.width;
-  const oldH=drawCanvas.height;
 
   drawCanvas.width=Math.max(1,Math.floor(rect.width*devicePixelRatio));
   drawCanvas.height=Math.max(1,Math.floor(rect.height*devicePixelRatio));
@@ -738,9 +713,6 @@ function redrawDrawing(){
 
   if(rawDrawing.length<2)return;
 
-  /*
-     Rohlinie
-  */
   dctx.beginPath();
 
   rawDrawing.forEach((p,i)=>{
@@ -834,10 +806,6 @@ function clearDrawing(){
 }
 
 
-/* =========================================================
-   STRECKE STABILISIEREN
-========================================================= */
-
 function finishDrawing(){
 
   if(stabilizing)return;
@@ -869,12 +837,6 @@ function buildSmoothTrack(points){
 
   if(points.length<3)return points.slice();
 
-  /*
-     Erst leicht resamplen.
-     Dadurch werden sehr kleine Zittern
-     und harte Richtungswechsel entfernt.
-  */
-
   const pts=[];
 
   for(let i=0;i<points.length;i+=2){
@@ -885,10 +847,6 @@ function buildSmoothTrack(points){
   }
 
   if(pts.length<8)return pts;
-
-  /*
-     Mehrere Glättungsdurchgänge
-  */
 
   let result=pts;
 
@@ -910,10 +868,6 @@ function buildSmoothTrack(points){
 
     result=next;
   }
-
-  /*
-     Gleichmässiger Abstand
-  */
 
   const spaced=[];
 
@@ -1024,10 +978,6 @@ function drawStabilizedPreview(track,count){
 
   if(count<2)return;
 
-  /*
-     Schatten / Strassenrand
-  */
-
   dctx.beginPath();
 
   for(let i=0;i<count;i++){
@@ -1046,10 +996,6 @@ function drawStabilizedPreview(track,count){
   dctx.strokeStyle="#3d464c";
   dctx.stroke();
 
-  /*
-     Asphalt
-  */
-
   dctx.beginPath();
 
   for(let i=0;i<count;i++){
@@ -1065,10 +1011,6 @@ function drawStabilizedPreview(track,count){
   dctx.lineWidth=18;
   dctx.strokeStyle="#171d22";
   dctx.stroke();
-
-  /*
-     Mittellinie
-  */
 
   dctx.beginPath();
 
@@ -1087,10 +1029,6 @@ function drawStabilizedPreview(track,count){
   dctx.strokeStyle="#657079";
   dctx.stroke();
   dctx.setLineDash([]);
-
-  /*
-     Startpunkt
-  */
 
   if(count>0){
 
@@ -1130,10 +1068,6 @@ function calculateTrackLength(track){
   return length;
 }
 
-
-/* =========================================================
-   TRACK SPEICHERN
-========================================================= */
 
 function saveCurrentTrack(){
 
@@ -1230,10 +1164,6 @@ function showTracks(){
 }
 
 
-/* =========================================================
-   WEEKEND
-========================================================= */
-
 function openWeekend(){
 
   showScreen("weekendScreen");
@@ -1257,10 +1187,6 @@ function openWeekend(){
 }
 
 
-/* =========================================================
-   GAME SETUP
-========================================================= */
-
 function resizeGameCanvas(){
 
   W=innerWidth;
@@ -1279,8 +1205,10 @@ function resizeGameCanvas(){
   );
 }
 
-resizeGameCanvas();
 
+/* =========================================================
+   GRÖSSERE STRECKE
+========================================================= */
 
 function prepareTrackForGame(){
 
@@ -1291,14 +1219,15 @@ function prepareTrackForGame(){
   const minY=Math.min(...center.map(p=>p.y));
   const maxY=Math.max(...center.map(p=>p.y));
 
-  const tw=maxX-minX;
-  const th=maxY-minY;
+  const tw=Math.max(1,maxX-minX);
+  const th=Math.max(1,maxY-minY);
 
-  const margin=100;
+  const marginX=25;
+  const marginY=95;
 
   const scale=Math.min(
-    (W-margin*2)/tw,
-    (H-margin*2)/th
+    (W-marginX*2)/tw,
+    (H-marginY*2)/th
   );
 
   const cx=(minX+maxX)/2;
@@ -1395,10 +1324,6 @@ function calculateCurve(index){
 }
 
 
-/* =========================================================
-   SESSION
-========================================================= */
-
 function startSession(type){
 
   if(!currentTrack){
@@ -1414,9 +1339,9 @@ function startSession(type){
     y:p.y
   }));
 
-  prepareTrackForGame();
-
   resizeGameCanvas();
+
+  prepareTrackForGame();
 
   const start=pointAt(0);
 
@@ -1528,10 +1453,6 @@ function createAI(){
 }
 
 
-/* =========================================================
-   PLAYER
-========================================================= */
-
 const keys={
   left:false,
   right:false,
@@ -1539,6 +1460,10 @@ const keys={
   brake:false
 };
 
+
+/* =========================================================
+   SPIELER - MEHR GRIP
+========================================================= */
 
 function updatePlayer(dt){
 
@@ -1594,24 +1519,48 @@ function updatePlayer(dt){
   if(keys.left)steerInput-=1;
   if(keys.right)steerInput+=1;
 
-  /*
-     Realistischere Lenkung:
-     bei hoher Geschwindigkeit etwas weniger
-     hektisch.
-  */
+  const speed01=
+    clamp(
+      player.speed/car.top,
+      0,
+      1
+    );
 
   const steerStrength=
-    (1.55-player.speed/car.top*.45)*
+    (1.20+
+    (1-speed01)*.65)*
     car.grip;
 
   player.steer+=
     (steerInput-player.steer)*
-    Math.min(1,dt*9);
+    Math.min(
+      1,
+      dt*(steerInput===0?14:10)
+    );
 
   player.angle+=
     player.steer*
     steerStrength*
     dt;
+
+  if(steerInput===0 && speed01>.15){
+
+    const roadAngle=
+      tangentAt(player.idx);
+
+    const headingError=
+      angleDiff(
+        player.angle,
+        roadAngle
+      );
+
+    player.angle+=
+      headingError*
+      Math.min(
+        .14,
+        dt*(.8+speed01)
+      );
+  }
 
   player.x+=
     Math.cos(player.angle)*
@@ -1634,18 +1583,12 @@ function updatePlayer(dt){
 
   player.idx=near.i;
 
-  /*
-     Ausserhalb der Strecke:
-     langsam zurückführen,
-     aber niemals teleportieren.
-  */
-
   const roadWidth=30;
 
   if(near.d>roadWidth){
 
     player.speed*=
-      Math.pow(.92,dt*60);
+      Math.pow(.86,dt*60);
 
     const pull=
       clamp(
@@ -1658,17 +1601,13 @@ function updatePlayer(dt){
     player.x+=
       (near.x-player.x)*
       pull*
-      Math.min(1,dt*2.2);
+      Math.min(1,dt*2.5);
 
     player.y+=
       (near.y-player.y)*
       pull*
-      Math.min(1,dt*2.2);
+      Math.min(1,dt*2.5);
   }
-
-  /*
-     Kein endloses Wegfahren.
-  */
 
   const margin=120;
 
@@ -1693,19 +1632,12 @@ function updatePlayer(dt){
 
 
 /* =========================================================
-   KI
+   KI - MEHR GRIP
 ========================================================= */
 
 function updateAI(ai,dt){
 
   if(center.length<10)return;
-
-  /*
-     Wichtig:
-     Die KI sucht nur in ihrer Umgebung.
-     Dadurch springt sie bei Kreuzungen nicht
-     plötzlich auf einen anderen Streckenteil.
-  */
 
   let best=null;
 
@@ -1755,10 +1687,6 @@ function updateAI(ai,dt){
   const car=
     cars[ai.carIndex];
 
-  /*
-     Kurven = weniger Geschwindigkeit.
-  */
-
   let speedFactor=
     .95-
     curve*.48;
@@ -1784,10 +1712,6 @@ function updateAI(ai,dt){
   ai.targetSpeed=
     desiredSpeed;
 
-  /*
-     Geschmeidige Beschleunigung
-  */
-
   const speedResponse=
     ai.speed<ai.targetSpeed
       ?4.4
@@ -1805,10 +1729,6 @@ function updateAI(ai,dt){
     0,
     car.top*1.01
   );
-
-  /*
-     Vorausschau
-  */
 
   const look=
     Math.floor(
@@ -1838,11 +1758,6 @@ function updateAI(ai,dt){
   const normalY=
     Math.cos(targetTangent);
 
-  /*
-     Kleine Spurposition,
-     aber in Kurven automatisch kleiner.
-  */
-
   const lane=
     ai.laneOffset*
     30*
@@ -1862,13 +1777,6 @@ function updateAI(ai,dt){
       tx-ai.x
     );
 
-  /*
-     Der entscheidende Teil:
-     Die KI orientiert sich stark an
-     der echten Streckenrichtung.
-     Dadurch wirkt sie nicht wie auf Eis.
-  */
-
   let targetAngle=
     roadDirection*.72+
     targetDirection*.28;
@@ -1885,11 +1793,6 @@ function updateAI(ai,dt){
       -.72,
       .72
     );
-
-  /*
-     Wenn die KI vom Asphalt kommt,
-     sanft zurücklenken.
-  */
 
   if(near.d>30){
 
@@ -1914,24 +1817,23 @@ function updateAI(ai,dt){
       );
   }
 
-  /*
-     Steering smoothen.
-  */
-
   ai.steer+=
     (targetSteer-ai.steer)*
     Math.min(
       1,
-      dt*7
+      dt*10
     );
 
-  /*
-     Langsamere Lenkung bei hoher Geschwindigkeit.
-  */
+  const speed01=
+    clamp(
+      ai.speed/car.top,
+      0,
+      1
+    );
 
   const turnRate=
-    (1.65+
-    ai.speed/210)*
+    (1.20+
+    (1-speed01)*.75)*
     car.grip;
 
   ai.angle+=
@@ -1939,9 +1841,24 @@ function updateAI(ai,dt){
     turnRate*
     dt;
 
-  /*
-     Vorwärtsbewegung.
-  */
+  if(Math.abs(ai.steer)<.05 && speed01>.15){
+
+    const roadAngle=
+      tangentAt(ai.idx);
+
+    const headingError=
+      angleDiff(
+        ai.angle,
+        roadAngle
+      );
+
+    ai.angle+=
+      headingError*
+      Math.min(
+        .12,
+        dt*(.7+speed01)
+      );
+  }
 
   ai.x+=
     Math.cos(ai.angle)*
@@ -1955,10 +1872,6 @@ function updateAI(ai,dt){
     .30*
     dt;
 
-  /*
-     Strecke prüfen.
-  */
-
   const after=
     nearestOnTrack(
       ai.x,
@@ -1970,7 +1883,7 @@ function updateAI(ai,dt){
 
     ai.speed*=
       Math.pow(
-        .90,
+        .86,
         dt*60
       );
 
@@ -1986,7 +1899,7 @@ function updateAI(ai,dt){
       pull*
       Math.min(
         1,
-        dt*2.4
+        dt*2.6
       );
 
     ai.y+=
@@ -1994,14 +1907,9 @@ function updateAI(ai,dt){
       pull*
       Math.min(
         1,
-        dt*2.4
+        dt*2.6
       );
   }
-
-  /*
-     Sicherheitsbereich.
-     KEIN DESPAWN.
-  */
 
   const margin=140;
 
@@ -2029,10 +1937,6 @@ function updateAI(ai,dt){
     ai.speed*=.96;
   }
 
-  /*
-     Stuck-Erkennung.
-  */
-
   const moved=
     Math.hypot(
       ai.x-ai.lastX,
@@ -2057,12 +1961,6 @@ function updateAI(ai,dt){
 
   ai.lastX=ai.x;
   ai.lastY=ai.y;
-
-  /*
-     Wenn wirklich festgefahren:
-     sanft wieder auf die Linie.
-     Kein Teleport.
-  */
 
   if(ai.stuck>1.8){
 
@@ -2102,10 +2000,6 @@ function updateAI(ai,dt){
   }
 }
 
-
-/* =========================================================
-   RUNDEN / POSITION
-========================================================= */
 
 function updateLaps(){
 
@@ -2185,17 +2079,9 @@ function getPosition(){
 }
 
 
-/* =========================================================
-   ZEICHNEN
-========================================================= */
-
 function drawTrack(){
 
   if(center.length<2)return;
-
-  /*
-     Rand
-  */
 
   ctx.beginPath();
 
@@ -2215,10 +2101,6 @@ function drawTrack(){
   ctx.strokeStyle="#3c454b";
   ctx.stroke();
 
-  /*
-     Asphalt
-  */
-
   ctx.beginPath();
 
   center.forEach((p,i)=>{
@@ -2234,10 +2116,6 @@ function drawTrack(){
   ctx.lineWidth=36;
   ctx.strokeStyle="#171c20";
   ctx.stroke();
-
-  /*
-     Mittellinie
-  */
 
   ctx.beginPath();
 
@@ -2256,10 +2134,6 @@ function drawTrack(){
   ctx.strokeStyle="#56616a";
   ctx.stroke();
   ctx.setLineDash([]);
-
-  /*
-     Start/Ziel
-  */
 
   const p=pointAt(0);
   const a=tangentAt(0);
@@ -2334,10 +2208,6 @@ function drawCar(car,playerCar=false){
 
   ctx.fill();
 
-  /*
-     Cockpit
-  */
-
   ctx.fillStyle="#10151a";
 
   ctx.fillRect(
@@ -2346,10 +2216,6 @@ function drawCar(car,playerCar=false){
     width*.56,
     height*.35
   );
-
-  /*
-     Front
-  */
 
   ctx.fillStyle="#e9edf0";
 
@@ -2376,10 +2242,6 @@ function drawCars(){
 }
 
 
-/* =========================================================
-   HUD
-========================================================= */
-
 function updateHUD(){
 
   if(!player)return;
@@ -2399,10 +2261,6 @@ function updateHUD(){
     totalLaps;
 }
 
-
-/* =========================================================
-   GAME LOOP
-========================================================= */
 
 function gameLoop(now){
 
@@ -2444,10 +2302,6 @@ function drawGame(){
     H
   );
 
-  /*
-     Hintergrund
-  */
-
   ctx.fillStyle="#101820";
   ctx.fillRect(
     0,
@@ -2455,10 +2309,6 @@ function drawGame(){
     W,
     H
   );
-
-  /*
-     leichte Grid-Linien
-  */
 
   ctx.strokeStyle="rgba(70,85,95,.16)";
   ctx.lineWidth=1;
@@ -2486,10 +2336,6 @@ function drawGame(){
 }
 
 
-/* =========================================================
-   BANNER
-========================================================= */
-
 function showBanner(text){
 
   const banner=
@@ -2503,10 +2349,6 @@ function showBanner(text){
 }
 
 
-/* =========================================================
-   PAUSE
-========================================================= */
-
 function togglePause(){
 
   paused=!paused;
@@ -2517,10 +2359,6 @@ function togglePause(){
       :"Ⅱ";
 }
 
-
-/* =========================================================
-   TOUCH CONTROLS
-========================================================= */
 
 function bindTouch(id,key){
 
@@ -2550,10 +2388,6 @@ bindTouch("rightBtn","right");
 bindTouch("gasBtn","gas");
 bindTouch("brakeBtn","brake");
 
-
-/* =========================================================
-   TASTATUR
-========================================================= */
 
 window.addEventListener("keydown",e=>{
 
@@ -2598,10 +2432,6 @@ window.addEventListener("keyup",e=>{
   }
 });
 
-
-/* =========================================================
-   INITIALISIERUNG
-========================================================= */
 
 updateHomeInfo();
 openGarage();
