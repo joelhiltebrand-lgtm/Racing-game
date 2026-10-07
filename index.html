@@ -1,101 +1,1580 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>TrackForge Racing</title>
+
+<style>
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#080b10;
+  color:white;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+button{
+  border:0;
+  color:white;
+  font-weight:800;
+  font-size:16px;
+  border-radius:14px;
+  padding:14px 18px;
+  background:#1c2530;
+}
+
+button:active{
+  transform:scale(.97);
+}
+
+.screen{
+  position:absolute;
+  inset:0;
+  display:none;
+  overflow:auto;
+  background:
+    radial-gradient(circle at top,#172330 0,#080b10 55%);
+  padding:24px;
+}
+
+.screen.active{
+  display:block;
+}
+
+.logo{
+  font-size:34px;
+  font-weight:1000;
+  letter-spacing:-1px;
+  margin:20px 0 8px;
+}
+
+.sub{
+  color:#91a0ad;
+  margin-bottom:28px;
+}
+
+.menu{
+  max-width:520px;
+  margin:0 auto;
+}
+
+.menu button{
+  width:100%;
+  margin:7px 0;
+  min-height:58px;
+  text-align:left;
+}
+
+.primary{
+  background:#18c58b;
+  color:#03120d;
+}
+
+.danger{
+  background:#e34d5b;
+}
+
+.card{
+  max-width:700px;
+  margin:14px auto;
+  padding:18px;
+  background:#111820;
+  border:1px solid #26313c;
+  border-radius:18px;
+}
+
+.card h2{
+  margin-top:0;
+}
+
+.row{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.row button{
+  flex:1;
+}
+
+.carGrid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.car{
+  background:#151d25;
+  border:2px solid #293541;
+  border-radius:18px;
+  padding:15px;
+}
+
+.car.selected{
+  border-color:#18c58b;
+}
+
+.carPreview{
+  height:75px;
+  border-radius:14px;
+  margin-bottom:12px;
+  position:relative;
+  overflow:hidden;
+}
+
+.stat{
+  margin:7px 0;
+  font-size:13px;
+  color:#aab5bf;
+}
+
+.bar{
+  height:7px;
+  background:#26313c;
+  border-radius:10px;
+  overflow:hidden;
+  margin-top:4px;
+}
+
+.bar i{
+  display:block;
+  height:100%;
+  background:#18c58b;
+}
+
+#gameCanvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:none;
+  touch-action:none;
+}
+
+#hud{
+  position:absolute;
+  top:10px;
+  left:10px;
+  right:10px;
+  display:none;
+  justify-content:space-between;
+  gap:8px;
+  pointer-events:none;
+}
+
+.hudBox{
+  background:rgba(5,9,13,.78);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:12px;
+  padding:8px 11px;
+  min-width:90px;
+  backdrop-filter:blur(5px);
+}
+
+.hudLabel{
+  color:#8c9aa6;
+  font-size:10px;
+}
+
+.hudValue{
+  font-weight:900;
+  font-size:17px;
+}
+
+#touchControls{
+  position:absolute;
+  inset:0;
+  display:none;
+  pointer-events:none;
+}
+
+.touch{
+  position:absolute;
+  bottom:22px;
+  width:70px;
+  height:70px;
+  border-radius:50%;
+  background:rgba(20,27,34,.75);
+  border:2px solid rgba(255,255,255,.15);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:27px;
+  pointer-events:auto;
+  user-select:none;
+}
+
+#leftBtn{left:18px}
+#rightBtn{left:98px}
+#brakeBtn{right:98px}
+#gasBtn{right:18px}
+
+#pauseBtn{
+  position:absolute;
+  top:72px;
+  right:12px;
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:rgba(10,15,20,.8);
+  display:none;
+  font-size:20px;
+}
+
+#banner{
+  position:absolute;
+  top:105px;
+  left:50%;
+  transform:translateX(-50%);
+  padding:11px 20px;
+  background:rgba(8,12,16,.9);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:14px;
+  font-weight:900;
+  display:none;
+  pointer-events:none;
+}
+
+.back{
+  margin-bottom:15px;
+}
+
+.trackInfo{
+  color:#9aa7b2;
+  line-height:1.6;
+}
+
+.big{
+  font-size:42px;
+  font-weight:1000;
+}
+
+.center{
+  text-align:center;
+}
+
+/* GRÖSSERES ZEICHENFELD */
+#drawCanvas{
+  width:100%;
+  height:72vh;
+  min-height:420px;
+  background:#0c1117;
+  border:2px dashed #33414d;
+  border-radius:18px;
+  touch-action:none;
+}
+
+.tip{
+  color:#8e9aa5;
+  font-size:13px;
+  margin-top:10px;
+}
+
+.listItem{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:14px;
+  margin:8px 0;
+  background:#151d25;
+  border-radius:14px;
+}
+
+@media(max-width:500px){
+  .screen{
+    padding:16px;
+  }
+
+  .logo{
+    font-size:29px;
+  }
+
+  .carGrid{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div id="menu" class="screen active">
+  <div class="menu">
+    <div class="logo">🏁 TrackForge Racing</div>
+    <div class="sub">
+      Zeichne deine Strecke. Fahre dein Rennen.
+    </div>
+
+    <button class="primary" onclick="openWeekend()">
+      🏎️ Fahren
+    </button>
+
+    <button onclick="openDrawing()">
+      ✏️ Strecke zeichnen
+    </button>
+
+    <button onclick="openGarage()">
+      🔧 Garage
+    </button>
+
+    <button onclick="openTracks()">
+      🗺️ Meine Strecken
+    </button>
+
+    <button onclick="openSettings()">
+      ⚙️ Einstellungen
+    </button>
+  </div>
+</div>
+
+<div id="weekend" class="screen">
+  <div class="menu">
+    <button class="back" onclick="showScreen('menu')">← Zurück</button>
+
+    <div class="logo">🏁 Rennwochenende</div>
+
+    <div class="card">
+      <h2>Strecke</h2>
+      <div id="selectedTrackInfo" class="trackInfo"></div>
+    </div>
+
+    <div class="card">
+      <h2>Auto</h2>
+      <div id="selectedCarInfo" class="trackInfo"></div>
+    </div>
+
+    <div class="card">
+      <h2>Session</h2>
+
+      <button class="primary" onclick="startSession('training')">
+        🟢 Training
+      </button>
+
+      <button onclick="startSession('qualifying')">
+        🟡 Qualifying
+      </button>
+
+      <button onclick="startSession('race')">
+        🔴 Rennen
+      </button>
+    </div>
+  </div>
+</div>
+
+<div id="garage" class="screen">
+  <div class="menu">
+    <button class="back" onclick="showScreen('menu')">← Zurück</button>
+
+    <div class="logo">🔧 Garage</div>
+
+    <div id="carGrid" class="carGrid"></div>
+  </div>
+</div>
+
+<div id="drawing" class="screen">
+  <div class="menu">
+    <button class="back" onclick="showScreen('menu')">← Zurück</button>
+
+    <div class="logo">✏️ Strecke zeichnen</div>
+
+    <div class="card">
+      <canvas id="drawCanvas"></canvas>
+
+      <div class="tip">
+        Zeichne eine geschlossene Strecke mit dem Finger.
+        Am besten ungefähr eine Runde zeichnen.
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button onclick="clearDrawing()">Löschen</button>
+
+        <button class="primary" onclick="saveDrawing()">
+          Strecke speichern
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tracks" class="screen">
+  <div class="menu">
+    <button class="back" onclick="showScreen('menu')">← Zurück</button>
+
+    <div class="logo">🗺️ Meine Strecken</div>
+
+    <div id="trackList"></div>
+  </div>
+</div>
+
+<div id="settings" class="screen">
+  <div class="menu">
+    <button class="back" onclick="showScreen('menu')">← Zurück</button>
+
+    <div class="logo">⚙️ Einstellungen</div>
+
+    <div class="card">
+      <h2>KI Schwierigkeit</h2>
+
+      <div class="row">
+        <button onclick="setDifficulty(1)">Leicht</button>
+        <button onclick="setDifficulty(2)">Normal</button>
+        <button onclick="setDifficulty(3)">Schwer</button>
+      </div>
+
+      <p id="difficultyText"></p>
+    </div>
+
+    <div class="card">
+      <h2>Ideallinie</h2>
+
+      <button onclick="toggleIdeal()">
+        Ideallinie ein / aus
+      </button>
+
+      <p id="idealText"></p>
+    </div>
+  </div>
+</div>
+
+<canvas id="gameCanvas"></canvas>
+
+<div id="hud">
+
+  <div class="hudBox">
+    <div class="hudLabel">SESSION</div>
+    <div id="hudSession" class="hudValue">TRAINING</div>
+  </div>
+
+  <div class="hudBox">
+    <div class="hudLabel">POSITION</div>
+    <div id="hudPosition" class="hudValue">P1</div>
+  </div>
+
+  <div class="hudBox">
+    <div class="hudLabel">RUNDE</div>
+    <div id="hudLap" class="hudValue">1/3</div>
+  </div>
+
+  <div class="hudBox">
+    <div class="hudLabel">SPEED</div>
+    <div id="hudSpeed" class="hudValue">0 km/h</div>
+  </div>
+
+</div>
+
+<div id="banner"></div>
+
+<button id="pauseBtn" onclick="togglePause()">Ⅱ</button>
+
+<div id="touchControls">
+  <div id="leftBtn" class="touch">◀</div>
+  <div id="rightBtn" class="touch">▶</div>
+  <div id="brakeBtn" class="touch">▼</div>
+  <div id="gasBtn" class="touch">▲</div>
+</div>
+
+<div id="result" class="screen">
+
+  <div class="menu center">
+
+    <div class="logo">🏆 Ergebnis</div>
+
+    <div class="card">
+      <div id="resultContent"></div>
+    </div>
+
+    <button class="primary" onclick="showScreen('menu')">
+      Hauptmenü
+    </button>
+
+    <button onclick="openWeekend()">
+      Noch ein Rennen
+    </button>
+
+  </div>
+
+</div>
+
+<script>
+
+const canvas =
+  document.getElementById("gameCanvas");
+
+const ctx =
+  canvas.getContext("2d");
+
+const drawCanvas =
+  document.getElementById("drawCanvas");
+
+const dctx =
+  drawCanvas.getContext("2d");
+
+let W=0;
+let H=0;
+
+let center=[];
+let roadWidth=85;
+
+let raceActive=false;
+let paused=false;
+
+let sessionType="training";
+
+let selectedCar=0;
+
+let difficulty =
+  Number(
+    localStorage.getItem("difficulty") || 2
+  );
+
+let showIdealLine =
+  localStorage.getItem("idealLine") !== "false";
+
+let savedTracks =
+  JSON.parse(
+    localStorage.getItem("trackforge_tracks") || "[]"
+  );
+
+let currentTrack=0;
+
+let player={
+  x:0,
+  y:0,
+  angle:0,
+  speed:0,
+  idx:0,
+  lap:0,
+  lapStart:0,
+  bestLap:Infinity,
+  totalTime:0
+};
+
+let ais=[];
+
+let keys={
+  left:false,
+  right:false,
+  gas:false,
+  brake:false
+};
+
+let incidents=0;
+let pitStops=0;
+let tireWear=0;
+
+let raceStartTime=0;
+let lastFrame=0;
+
+const cars=[
+  {
+    name:"Lightning GT",
+    color:"#e33b4f",
+    top:220,
+    acc:10.5,
+    brake:9,
+    grip:1.0,
+    weight:1.0
+  },
+  {
+    name:"Apex R",
+    color:"#3da5ff",
+    top:235,
+    acc:11.5,
+    brake:9.5,
+    grip:.97,
+    weight:.95
+  },
+  {
+    name:"Vortex X",
+    color:"#f0b63c",
+    top:250,
+    acc:12.5,
+    brake:10,
+    grip:.93,
+    weight:.9
+  },
+  {
+    name:"Formula Pro",
+    color:"#b985ff",
+    top:265,
+    acc:13.2,
+    brake:10.5,
+    grip:.98,
+    weight:.86
+  }
+];
+
+/* ================= SCREEN SYSTEM ================= */
+
+function showScreen(id){
+
+  document.querySelectorAll(".screen")
+    .forEach(s=>s.classList.remove("active"));
+
+  const el =
+    document.getElementById(id);
+
+  if(el)
+    el.classList.add("active");
+
+  document.getElementById("gameCanvas")
+    .style.display="none";
+
+  document.getElementById("hud")
+    .style.display="none";
+
+  document.getElementById("touchControls")
+    .style.display="none";
+
+  document.getElementById("pauseBtn")
+    .style.display="none";
+}
+
+function openGarage(){
+  renderGarage();
+  showScreen("garage");
+}
+
+function openWeekend(){
+  updateWeekendInfo();
+  showScreen("weekend");
+}
+
+function openTracks(){
+  renderTracks();
+  showScreen("tracks");
+}
+
+function openSettings(){
+  updateSettings();
+  showScreen("settings");
+}
+
+/* ================= GARAGE ================= */
+
+function renderGarage(){
+
+  const grid =
+    document.getElementById("carGrid");
+
+  grid.innerHTML="";
+
+  cars.forEach((car,i)=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className =
+      "car "+
+      (i===selectedCar?"selected":"");
+
+    div.innerHTML=`
+      <div class="carPreview"
+           style="background:${car.color}">
+      </div>
+
+      <h2>${car.name}</h2>
+
+      <div class="stat">
+        Topspeed ${car.top}
+        <div class="bar">
+          <i style="width:${car.top/2.7}%"></i>
+        </div>
+      </div>
+
+      <div class="stat">
+        Beschleunigung
+        <div class="bar">
+          <i style="width:${car.acc*6.8}%"></i>
+        </div>
+      </div>
+
+      <div class="stat">
+        Bremsen
+        <div class="bar">
+          <i style="width:${car.brake*8}%"></i>
+        </div>
+      </div>
+
+      <div class="stat">
+        Grip
+        <div class="bar">
+          <i style="width:${car.grip*100}%"></i>
+        </div>
+      </div>
+
+      <button onclick="selectCar(${i})">
+        ${
+          i===selectedCar
+          ?"✓ Ausgewählt"
+          :"Auswählen"
+        }
+      </button>
+    `;
+
+    grid.appendChild(div);
+  });
+}
+
+function selectCar(i){
+
+  selectedCar=i;
+
+  localStorage.setItem(
+    "trackforge_car",
+    String(i)
+  );
+
+  renderGarage();
+  updateWeekendInfo();
+}
+
+/* ================= TRACKS ================= */
+
+function createDefaultTrack(){
+
+  const points=[];
+
+  const cx=.5;
+  const cy=.5;
+
+  const rx=.36;
+  const ry=.27;
+
+  for(let i=0;i<220;i++){
+
+    const a =
+      i/220*
+      Math.PI*2;
+
+    points.push({
+      x:(cx+Math.cos(a)*rx)*W,
+      y:(cy+Math.sin(a)*ry)*H
+    });
+  }
+
+  return smoothTrack(points);
+}
+
+function smoothTrack(points){
+
+  if(points.length<4)
+    return points;
+
+  const result=[];
+
+  for(let i=0;i<points.length;i++){
+
+    const a =
+      points[
+        (i-1+points.length)%
+        points.length
+      ];
+
+    const b =
+      points[i];
+
+    const c =
+      points[
+        (i+1)%
+        points.length
+      ];
+
+    result.push({
+      x:(a.x+b.x*2+c.x)/4,
+      y:(a.y+b.y*2+c.y)/4
+    });
+  }
+
+  return result;
+}
+
+function updateWeekendInfo(){
+
+  const trackName =
+    savedTracks[currentTrack]?.name ||
+    "Standard-Strecke";
+
+  document.getElementById(
+    "selectedTrackInfo"
+  ).innerHTML=
+    `<b>${trackName}</b><br>
+     ${center.length} Streckenpunkte`;
+
+  const car =
+    cars[selectedCar];
+
+  document.getElementById(
+    "selectedCarInfo"
+  ).innerHTML=
+    `<b>${car.name}</b><br>
+     Topspeed: ${car.top} km/h<br>
+     Grip: ${Math.round(car.grip*100)}%`;
+}
+
+function renderTracks(){
+
+  const list =
+    document.getElementById("trackList");
+
+  list.innerHTML="";
+
+  if(savedTracks.length===0){
+
+    list.innerHTML=`
+      <div class="card">
+        Noch keine eigenen Strecken.
+      </div>
+    `;
+  }
+
+  savedTracks.forEach((t,i)=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className="listItem";
+
+    div.innerHTML=`
+      <div>
+        <b>${t.name}</b><br>
+        <small>${t.points.length} Punkte</small>
+      </div>
+
+      <button onclick="selectTrack(${i})">
+        Fahren
+      </button>
+    `;
+
+    list.appendChild(div);
+  });
+}
+
+function selectTrack(i){
+
+  currentTrack=i;
+
+  localStorage.setItem(
+    "trackforge_track",
+    String(i)
+  );
+
+  center =
+    savedTracks[i].points.map(p=>({
+      x:p.x,
+      y:p.y
+    }));
+
+  openWeekend();
+}
+
+/* ================= DRAWING ================= */
+
+let drawing=false;
+let drawPoints=[];
+
+function resizeDrawCanvas(){
+
+  const rect =
+    drawCanvas.getBoundingClientRect();
+
+  drawCanvas.width =
+    Math.max(
+      300,
+      Math.floor(rect.width)
+    );
+
+  drawCanvas.height =
+    Math.max(
+      420,
+      Math.floor(rect.height)
+    );
+
+  redrawDrawing();
+}
+
+function getDrawPoint(e){
+
+  const rect =
+    drawCanvas.getBoundingClientRect();
+
+  let x,y;
+
+  if(e.touches){
+
+    x =
+      e.touches[0].clientX-
+      rect.left;
+
+    y =
+      e.touches[0].clientY-
+      rect.top;
+
+  }else{
+
+    x =
+      e.clientX-
+      rect.left;
+
+    y =
+      e.clientY-
+      rect.top;
+  }
+
+  return {x,y};
+}
+
+function startDrawing(e){
+
+  e.preventDefault();
+
+  drawing=true;
+
+  drawPoints=[
+    getDrawPoint(e)
+  ];
+
+  redrawDrawing();
+}
+
+function moveDrawing(e){
+
+  if(!drawing)
+    return;
+
+  e.preventDefault();
+
+  const p =
+    getDrawPoint(e);
+
+  const last =
+    drawPoints[
+      drawPoints.length-1
+    ];
+
+  const dx =
+    p.x-last.x;
+
+  const dy =
+    p.y-last.y;
+
+  if(Math.hypot(dx,dy)>5){
+
+    drawPoints.push(p);
+
+    redrawDrawing();
+  }
+}
+
+function stopDrawing(){
+  drawing=false;
+}
+
+function redrawDrawing(){
+
+  dctx.clearRect(
+    0,
+    0,
+    drawCanvas.width,
+    drawCanvas.height
+  );
+
+  if(drawPoints.length<2)
+    return;
+
+  dctx.lineWidth=25;
+  dctx.lineCap="round";
+  dctx.lineJoin="round";
+  dctx.strokeStyle="#27313a";
+
+  dctx.beginPath();
+
+  drawPoints.forEach((p,i)=>{
+
+    if(i===0)
+      dctx.moveTo(p.x,p.y);
+    else
+      dctx.lineTo(p.x,p.y);
+  });
+
+  dctx.stroke();
+
+  dctx.lineWidth=15;
+  dctx.strokeStyle="#6f7880";
+
+  dctx.beginPath();
+
+  drawPoints.forEach((p,i)=>{
+
+    if(i===0)
+      dctx.moveTo(p.x,p.y);
+    else
+      dctx.lineTo(p.x,p.y);
+  });
+
+  dctx.stroke();
+}
+
+function clearDrawing(){
+
+  drawPoints=[];
+
+  redrawDrawing();
+}
+
+function saveDrawing(){
+
+  if(drawPoints.length<20){
+
+    alert(
+      "Zeichne zuerst eine etwas längere Strecke."
+    );
+
+    return;
+  }
+
+  const w =
+    drawCanvas.width;
+
+  const h =
+    drawCanvas.height;
+
+  let points =
+    drawPoints.map(p=>({
+      x:p.x/w*W,
+      y:p.y/h*H
+    }));
+
+  points=
+    smoothTrack(points);
+
+  const name =
+    "Meine Strecke "+
+    (savedTracks.length+1);
+
+  savedTracks.push({
+    name,
+    points
+  });
+
+  localStorage.setItem(
+    "trackforge_tracks",
+    JSON.stringify(savedTracks)
+  );
+
+  alert(
+    "Strecke gespeichert! 🏁"
+  );
+
+  currentTrack=
+    savedTracks.length-1;
+
+  clearDrawing();
+
+  openWeekend();
+}
+
+function openDrawing(){
+
+  showScreen("drawing");
+
+  setTimeout(
+    resizeDrawCanvas,
+    50
+  );
+}
+
+/* ================= SETTINGS ================= */
+
+function setDifficulty(n){
+
+  difficulty=n;
+
+  localStorage.setItem(
+    "difficulty",
+    String(n)
+  );
+
+  updateSettings();
+}
+
+function updateSettings(){
+
+  const names={
+    1:"Leicht",
+    2:"Normal",
+    3:"Schwer"
+  };
+
+  document.getElementById(
+    "difficultyText"
+  ).textContent=
+    "Aktuell: "+
+    names[difficulty];
+
+  document.getElementById(
+    "idealText"
+  ).textContent=
+    showIdealLine
+    ?"Ideallinie ist aktiviert."
+    :"Ideallinie ist deaktiviert.";
+}
+
+function toggleIdeal(){
+
+  showIdealLine=
+    !showIdealLine;
+
+  localStorage.setItem(
+    "idealLine",
+    String(showIdealLine)
+  );
+
+  updateSettings();
+}
+
+/* ================= CANVAS ================= */
+
+function resizeGame(){
+
+  W=window.innerWidth;
+  H=window.innerHeight;
+
+  const dpr =
+    Math.min(
+      window.devicePixelRatio||1,
+      2
+    );
+
+  canvas.width=
+    Math.floor(W*dpr);
+
+  canvas.height=
+    Math.floor(H*dpr);
+
+  canvas.style.width=
+    W+"px";
+
+  canvas.style.height=
+    H+"px";
+
+  ctx.setTransform(
+    dpr,
+    0,
+    0,
+    dpr,
+    0,
+    0
+  );
+
+  if(!center.length)
+    center=createDefaultTrack();
+}
+
+window.addEventListener(
+  "resize",
+  resizeGame
+);
+
+/* ================= GEOMETRIE ================= */
+
+function distanceToSegment(px,py,a,b){
+
+  const vx=b.x-a.x;
+  const vy=b.y-a.y;
+
+  const wx=px-a.x;
+  const wy=py-a.y;
+
+  const len=vx*vx+vy*vy;
+
+  let t=
+    len===0
+    ?0
+    :(wx*vx+wy*vy)/len;
+
+  t=
+    Math.max(
+      0,
+      Math.min(1,t)
+    );
+
+  const x=a.x+vx*t;
+  const y=a.y+vy*t;
+
+  return {
+    d:Math.hypot(px-x,py-y),
+    x,
+    y
+  };
+}
+
+function nearest(x,y){
+
+  let best={
+    d:Infinity,
+    i:0,
+    x:0,
+    y:0
+  };
+
+  for(let i=0;i<center.length;i++){
+
+    const a=center[i];
+
+    const b=
+      center[
+        (i+1)%center.length
+      ];
+
+    const q=
+      distanceToSegment(
+        x,y,a,b
+      );
+
+    if(q.d<best.d){
+
+      best={
+        d:q.d,
+        i,
+        x:q.x,
+        y:q.y
+      };
+    }
+  }
+
+  return best;
+}
+
+function pointAt(i){
+
+  return center[
+    ((i%center.length)+
+     center.length)%
+    center.length
+  ];
+}
+
+function tangentAt(i){
+
+  const a=
+    pointAt(i-2);
+
+  const b=
+    pointAt(i+2);
+
+  return Math.atan2(
+    b.y-a.y,
+    b.x-a.x
+  );
+}
+
+function angleDiff(a,b){
+
+  let d=
+    (b-a+Math.PI)%
+    (Math.PI*2);
+
+  if(d<0)
+    d+=Math.PI*2;
+
+  return d-Math.PI;
+}
+
+function clamp(v,min,max){
+
+  return Math.max(
+    min,
+    Math.min(max,v)
+  );
+}
+
+/* ================= SESSION ================= */
+
+function startSession(type){
+
+  sessionType=type;
+
+  if(!center.length)
+    center=createDefaultTrack();
+
+  raceActive=true;
+  paused=false;
+
+  incidents=0;
+  pitStops=0;
+  tireWear=0;
+
+  player={
+    x:center[0].x,
+    y:center[0].y,
+    angle:tangentAt(0),
+    speed:0,
+    idx:0,
+    lap:0,
+    lapStart:performance.now(),
+    bestLap:Infinity,
+    totalTime:0
+  };
+
+  createAI();
+
+  document.querySelectorAll(".screen")
+    .forEach(
+      s=>s.classList.remove("active")
+    );
+
+  canvas.style.display="block";
+
+  document.getElementById(
+    "hud"
+  ).style.display="flex";
+
+  document.getElementById(
+    "touchControls"
+  ).style.display="block";
+
+  document.getElementById(
+    "pauseBtn"
+  ).style.display="block";
+
+  document.getElementById(
+    "hudSession"
+  ).textContent=
+    type.toUpperCase();
+
+  raceStartTime=
+    performance.now();
+
+  lastFrame=
+    performance.now();
+
+  requestAnimationFrame(loop);
+
+  showBanner(
+    type==="training"
+      ?"TRAINING"
+      :type==="qualifying"
+      ?"QUALIFYING"
+      :"RENNEN",
+    1200
+  );
+}
+
+/* ================= KI ================= */
+
+function createAI(){
+
+  ais=[];
+
+  const aiColors=[
+    "#e8e8e8",
+    "#45d6c0",
+    "#f3bd45",
+    "#9c83ff",
+    "#ff7188"
+  ];
+
+  const aiCars=[
+    0,1,2,3,1
+  ];
+
+  for(let i=0;i<5;i++){
+
+    const start=
+      Math.floor(
+        center.length*
+        (.04+i*.035)
+      );
+
+    const p=
+      pointAt(start);
+
+    const tangent=
+      tangentAt(start);
+
+    const laneValues=
+      [-.28,-.12,.10,.27,-.05];
+
+    const car=
+      cars[aiCars[i]];
+
+    ais.push({
+
+      x:p.x,
+      y:p.y,
+
+      angle:tangent,
+
+      speed:0,
+
+      targetSpeed:0,
+
+      idx:start,
+
+      lap:0,
+
+      color:aiColors[i],
+
+      carIndex:aiCars[i],
+
+      laneOffset:laneValues[i],
+
+      skill:
+        .80+
+        difficulty*.07+
+        Math.random()*.08,
+
+      stuck:0,
+
+      lastX:p.x,
+      lastY:p.y,
+
+      recovery:0,
+
+      /* NEU: gespeicherte Lenkung */
+      steer:0
+    });
+  }
+}
+
+function calculateCurve(idx){
+
+  const now=
+    tangentAt(idx);
+
+  const future=
+    tangentAt(idx+18);
+
+  const diff=
+    Math.abs(
+      angleDiff(
+        now,
+        future
+      )
+    );
+
+  return clamp(
+    diff/1.4,
+    0,
+    1
+  );
+}
+
+/*
+===========================================================
+VERBESSERTE KI
+
+- flüssigere Lenkung
+- mehr Grip
+- kein Teleport
+- kein Despawn
+- stabilerer Streckenfortschritt
+===========================================================
+*/
+
 function updateAI(ai,dt){
 
-  if(center.length < 10)
+  if(center.length<10)
     return;
 
   /*
-    =====================================================
-    1. STABILER STRECKENPUNKT
-    =====================================================
-    Die KI sucht nicht mehr die komplette Strecke ab.
-    Dadurch springt sie bei Kreuzungen oder engen Stellen
-    nicht plötzlich zu einem falschen Streckenpunkt.
+    Lokale Suche statt komplette Strecke.
+    Dadurch springt die KI an Kreuzungen nicht
+    plötzlich auf einen anderen Streckenabschnitt.
   */
 
-  let best = null;
+  let best=null;
 
-  const searchBack = 8;
-  const searchForward = 38;
+  const searchBack=8;
+  const searchForward=38;
 
-  for(let o=-searchBack;o<=searchForward;o++){
+  for(
+    let o=-searchBack;
+    o<=searchForward;
+    o++
+  ){
 
-    const index =
-      ((ai.idx+o)%center.length+
-       center.length)%
+    const index=
+      (
+        (ai.idx+o)%
+        center.length+
+        center.length
+      )%
       center.length;
 
-    const p =
+    const p=
       pointAt(index);
 
-    const d =
+    const d=
       Math.hypot(
         ai.x-p.x,
         ai.y-p.y
       );
 
-    /*
-      Punkte hinter dem Auto bekommen eine kleine Strafe.
-      So bleibt die KI eher auf ihrem aktuellen Fortschritt.
-    */
+    const progressPenalty=
+      o<0 ? 18 : 0;
 
-    const progressPenalty =
-      o < 0 ? 18 : 0;
-
-    const score =
-      d+progressPenalty;
+    const score=
+      d+
+      progressPenalty;
 
     if(
       !best ||
-      score < best.score
+      score<best.score
     ){
 
-      best = {
+      best={
         i:index,
-        d,
-        score,
+        d:d,
+        score:score,
         x:p.x,
         y:p.y
       };
     }
   }
 
-  const near = best;
+  const near=best;
 
-  ai.idx =
-    near.i;
+  ai.idx=near.i;
 
-  const curve =
+  const curve=
     calculateCurve(ai.idx);
 
-  const car =
+  const car=
     cars[ai.carIndex];
 
   /*
-    =====================================================
-    2. ZIELGESCHWINDIGKEIT
-    =====================================================
+    Geschwindigkeit
   */
 
-  let speedFactor =
-    0.94 -
-    curve*0.48;
+  let speedFactor=
+    .94-
+    curve*.48;
 
-  speedFactor +=
-    (difficulty-2)*0.045;
+  speedFactor+=
+    (difficulty-2)*.045;
 
-  let desiredSpeed =
-    car.top *
-    speedFactor *
+  let desiredSpeed=
+    car.top*
+    speedFactor*
     ai.skill;
 
-  /*
-    Wenn die KI etwas neben der Strecke ist,
-    wird sie vorsichtiger.
-  */
+  if(
+    near.d>
+    roadWidth*.55
+  ){
 
-  if(near.d > roadWidth*.55){
-
-    desiredSpeed *=
+    desiredSpeed*=
       clamp(
         1-
         (near.d-roadWidth*.55)/
@@ -105,33 +1584,30 @@ function updateAI(ai,dt){
       );
   }
 
-  ai.targetSpeed =
+  ai.targetSpeed=
     desiredSpeed;
 
   /*
-    =====================================================
-    3. FLÜSSIGE BESCHLEUNIGUNG
-    =====================================================
-    Statt sofort stark zu beschleunigen oder zu bremsen,
-    nähert sich die Geschwindigkeit langsam dem Ziel.
+    FLÜSSIGES BESCHLEUNIGEN/BREMSEN
   */
 
-  const speedResponse =
-    ai.speed < ai.targetSpeed
-      ? 3.2
-      : 5.0;
+  const speedResponse=
+    ai.speed<
+    ai.targetSpeed
+      ?3.2
+      :5.0;
 
-  ai.speed +=
+  ai.speed+=
     (
       ai.targetSpeed-
       ai.speed
-    ) *
+    )*
     Math.min(
       1,
       speedResponse*dt
     );
 
-  ai.speed =
+  ai.speed=
     clamp(
       ai.speed,
       0,
@@ -139,140 +1615,134 @@ function updateAI(ai,dt){
     );
 
   /*
-    =====================================================
-    4. LOOKAHEAD
-    =====================================================
+    Lookahead
   */
 
-  const look =
+  const look=
     Math.floor(
       7+
       ai.speed*.075+
       curve*5
     );
 
-  const targetIndex =
+  const targetIndex=
     ai.idx+look;
 
-  const target =
+  const target=
     pointAt(targetIndex);
 
-  const tangent =
+  const tangent=
     tangentAt(targetIndex);
 
   /*
-    =====================================================
-    5. FAHRSPUR
-    =====================================================
+    Fahrspur
   */
 
-  const normalX =
+  const normalX=
     -Math.sin(tangent);
 
-  const normalY =
+  const normalY=
     Math.cos(tangent);
 
   /*
-    In engen Kurven etwas weniger seitlicher Abstand.
+    In engen Kurven weniger seitlicher
+    Abstand.
   */
 
-  const safeLane =
-    ai.laneOffset *
-    roadWidth *
-    .55 *
+  const safeLane=
+    ai.laneOffset*
+    roadWidth*
+    .55*
     (1-curve*.55);
 
-  const tx =
+  const tx=
     target.x+
     normalX*safeLane;
 
-  const ty =
+  const ty=
     target.y+
     normalY*safeLane;
 
   /*
-    =====================================================
-    6. ZIELRICHTUNG
-    =====================================================
+    Zielrichtung
   */
 
-  const targetDirection =
+  const targetDirection=
     Math.atan2(
       ty-ai.y,
       tx-ai.x
     );
 
   /*
-    Wir kombinieren Zielrichtung und Streckenrichtung.
-    Dadurch fährt die KI nicht so nervös.
+    Streckenrichtung
   */
 
-  const roadDirection =
+  const roadDirection=
     tangentAt(
-      ai.idx+Math.floor(look*.35)
+      ai.idx+
+      Math.floor(look*.35)
     );
 
-  let targetAngle =
+  /*
+    Zielrichtung + Streckenrichtung
+  */
+
+  let targetAngle=
     targetDirection*.72+
     roadDirection*.28;
 
-  /*
-    Winkel normalisieren
-  */
-
   while(
-    targetAngle-ai.angle > Math.PI
+    targetAngle-ai.angle>
+    Math.PI
   )
     targetAngle-=Math.PI*2;
 
   while(
-    targetAngle-ai.angle < -Math.PI
+    targetAngle-ai.angle<
+    -Math.PI
   )
     targetAngle+=Math.PI*2;
 
   /*
-    =====================================================
-    7. FLÜSSIGE LENKUNG
-    =====================================================
-    Das ist die wichtigste Änderung gegen das Ruckeln.
+    Lenkfehler
   */
 
-  const angleError =
+  const angleError=
     angleDiff(
       ai.angle,
       targetAngle
     );
 
-  let targetSteer =
+  let targetSteer=
     clamp(
       angleError*1.35,
-      -0.85,
-      0.85
+      -.85,
+      .85
     );
 
   /*
-    Wenn wir zu weit draußen sind,
-    stärker zur Strecke lenken.
+    Wenn neben der Strecke,
+    zurücklenken.
   */
 
   if(
-    near.d >
+    near.d>
     roadWidth*.55
   ){
 
-    const correctionAngle =
+    const correctionAngle=
       Math.atan2(
         near.y-ai.y,
         near.x-ai.x
       );
 
-    const correction =
+    const correction=
       angleDiff(
         ai.angle,
         correctionAngle
       );
 
-    targetSteer =
+    targetSteer=
       clamp(
         targetSteer+
         correction*1.4,
@@ -282,41 +1752,35 @@ function updateAI(ai,dt){
   }
 
   /*
-    Smooth Steering:
-    Die Lenkung springt nicht mehr direkt auf den
-    neuen Wert, sondern bewegt sich langsam dorthin.
+    FLÜSSIGE LENKUNG
   */
 
   if(
-    typeof ai.steer !== "number"
+    typeof ai.steer!=="number"
   ){
 
-    ai.steer = 0;
+    ai.steer=0;
   }
 
-  ai.steer +=
+  ai.steer+=
     (
       targetSteer-
       ai.steer
-    ) *
+    )*
     Math.min(
       1,
       dt*5
     );
 
   /*
-    =====================================================
-    8. RICHTUNG KORRIGIEREN
-    =====================================================
-    Kein plötzliches:
-        ai.angle = roadAngle
-    mehr.
+    Richtungs-Recovery.
+    Kein plötzliches Setzen des Winkels mehr.
   */
 
-  const roadAngle =
+  const roadAngle=
     tangentAt(ai.idx);
 
-  const directionError =
+  const directionError=
     Math.abs(
       angleDiff(
         ai.angle,
@@ -325,27 +1789,27 @@ function updateAI(ai,dt){
     );
 
   if(
-    directionError > 1.8
+    directionError>1.8
   ){
 
-    const recoveryAngle =
+    const recoveryAngle=
       angleDiff(
         ai.angle,
         roadAngle
       );
 
-    ai.angle +=
+    ai.angle+=
       recoveryAngle*
       Math.min(
         1,
         dt*2.5
       );
 
-    ai.speed +=
+    ai.speed+=
       (
         car.top*.28-
         ai.speed
-      ) *
+      )*
       Math.min(
         1,
         dt*3
@@ -354,57 +1818,83 @@ function updateAI(ai,dt){
 
   /*
     =====================================================
-    9. LENKUNG AUF DAS AUTO ANWENDEN
+    MEHR GRIP
     =====================================================
   */
 
-  const steeringSpeed =
+  const steeringSpeed=
     1.55+
     ai.speed/170;
 
-  ai.angle +=
-    ai.steer*
-    steeringSpeed*
+  const maxTurn=
+    (
+      .95+
+      ai.speed/260
+    )*
     dt;
 
+  const actualTurn=
+    clamp(
+      ai.steer*
+      steeringSpeed*
+      dt,
+      -maxTurn,
+      maxTurn
+    );
+
+  ai.angle+=
+    actualTurn;
+
   /*
-    =====================================================
-    10. BEWEGUNG
-    =====================================================
+    Grip des jeweiligen Autos.
+    Keine seitliche Eis-Bewegung.
   */
 
-  ai.x +=
+  const grip=
+    clamp(
+      car.grip,
+      .88,
+      1
+    );
+
+  const forwardSpeed=
+    ai.speed*
+    grip;
+
+  /*
+    Bewegung
+  */
+
+  ai.x+=
     Math.cos(ai.angle)*
-    ai.speed*
+    forwardSpeed*
     .30*
     dt;
 
-  ai.y +=
+  ai.y+=
     Math.sin(ai.angle)*
-    ai.speed*
+    forwardSpeed*
     .30*
     dt;
 
   /*
     =====================================================
-    11. STRECKENKORREKTUR
+    STRECKENKORREKTUR
     =====================================================
-    Die KI wird sanft zurück zur Strecke gezogen.
-    KEIN TELEPORTIEREN.
   */
 
-  const after =
+  const after=
     nearest(
       ai.x,
       ai.y
     );
 
   if(
-    after.d >
+    after.d>
     roadWidth*.8
   ){
 
-    const pullStrength =
+    const pullStrength=
       clamp(
         (
           after.d-
@@ -415,21 +1905,17 @@ function updateAI(ai,dt){
         1
       );
 
-    /*
-      Geschwindigkeit reduzieren.
-    */
-
-    ai.speed *=
+    ai.speed*=
       Math.pow(
         .88,
         dt*60
       );
 
     /*
-      Sanft Richtung Strecke ziehen.
+      Sanfte Korrektur statt Teleport.
     */
 
-    ai.x +=
+    ai.x+=
       (
         after.x-
         ai.x
@@ -440,7 +1926,7 @@ function updateAI(ai,dt){
         dt*3.5
       );
 
-    ai.y +=
+    ai.y+=
       (
         after.y-
         ai.y
@@ -454,29 +1940,26 @@ function updateAI(ai,dt){
 
   /*
     =====================================================
-    12. BILDSCHIRM-SICHERHEIT
+    BILDSCHIRM-SICHERHEIT
     =====================================================
-    Falls die KI durch einen Fehler außerhalb des
-    sichtbaren Bereichs landet, wird sie nicht gelöscht.
-    Sie wird nur wieder in Richtung Strecke gelenkt.
   */
 
-  const margin = 120;
+  const margin=120;
 
   if(
-    ai.x < -margin ||
-    ai.x > W+margin ||
-    ai.y < -margin ||
-    ai.y > H+margin
+    ai.x<-margin ||
+    ai.x>W+margin ||
+    ai.y<-margin ||
+    ai.y>H+margin
   ){
 
-    const safe =
+    const safe=
       nearest(
         W/2,
         H/2
       );
 
-    ai.x +=
+    ai.x+=
       (
         safe.x-
         ai.x
@@ -486,7 +1969,7 @@ function updateAI(ai,dt){
         dt*1.5
       );
 
-    ai.y +=
+    ai.y+=
       (
         safe.y-
         ai.y
@@ -496,97 +1979,87 @@ function updateAI(ai,dt){
         dt*1.5
       );
 
-    ai.speed *=
-      .96;
+    ai.speed*=.96;
   }
 
   /*
     =====================================================
-    13. STUCK DETECTION
+    STUCK DETECTION
     =====================================================
-    Kein sichtbares Zurücksetzen mehr.
-    Stattdessen wird die KI langsam wieder in Bewegung
-    gebracht.
+    Kein sichtbares Zurücksetzen.
   */
 
-  const moved =
+  const moved=
     Math.hypot(
       ai.x-ai.lastX,
       ai.y-ai.lastY
     );
 
   if(
-    moved < 1.0 &&
-    ai.speed > 8
+    moved<1.0 &&
+    ai.speed>8
   ){
 
-    ai.stuck +=
-      dt;
+    ai.stuck+=dt;
 
   }else{
 
-    ai.stuck =
+    ai.stuck=
       Math.max(
         0,
         ai.stuck-dt*.5
       );
   }
 
-  ai.lastX =
-    ai.x;
-
-  ai.lastY =
-    ai.y;
+  ai.lastX=ai.x;
+  ai.lastY=ai.y;
 
   /*
-    Wenn die KI länger feststeckt:
-    nur Geschwindigkeit und Richtung sanft korrigieren.
-    KEIN Teleport.
+    Wenn festgefahren:
+    langsam wieder auf die Strecke drehen.
+    Kein Teleport.
   */
 
   if(
-    ai.stuck > 1.5
+    ai.stuck>1.5
   ){
 
-    const recovery =
+    const recovery=
       nearest(
         ai.x,
         ai.y
       );
 
-    const recoveryAngle =
+    const recoveryAngle=
       Math.atan2(
         recovery.y-ai.y,
         recovery.x-ai.x
       );
 
-    const recoveryDiff =
+    const recoveryDiff=
       angleDiff(
         ai.angle,
         recoveryAngle
       );
 
-    ai.angle +=
+    ai.angle+=
       recoveryDiff*
       Math.min(
         1,
         dt*2
       );
 
-    ai.speed =
+    ai.speed=
       Math.max(
         ai.speed,
         car.top*.18
       );
 
-    ai.stuck =
-      0;
+    ai.stuck=0;
   }
 
   /*
-    =====================================================
-    14. KLEINE FEHLER
-    =====================================================
+    Kleine Fehler
   */
 
   if(
@@ -595,7 +2068,1036 @@ function updateAI(ai,dt){
     .00003*dt*60
   ){
 
-    ai.speed *=
-      .97;
+    ai.speed*=.97;
   }
 }
+
+/* ================= SPIELER ================= */
+
+function updatePlayer(dt){
+
+  const car=
+    cars[selectedCar];
+
+  const steer=
+    (keys.right?1:0)-
+    (keys.left?1:0);
+
+  const throttle=
+    keys.gas?1:0;
+
+  const brake=
+    keys.brake?1:0;
+
+  const gripPenalty=
+    1-
+    tireWear*.002;
+
+  const acceleration=
+    car.acc*
+    24*
+    gripPenalty;
+
+  const braking=
+    car.brake*
+    28;
+
+  player.speed+=
+    (
+      throttle*acceleration-
+      brake*braking-
+      player.speed*.72
+    )*
+    dt;
+
+  player.speed=
+    clamp(
+      player.speed,
+      0,
+      car.top
+    );
+
+  const steering=
+    steer*
+    (
+      1.65+
+      player.speed/170
+    )*
+    dt*
+    (
+      .72+
+      car.grip*.18
+    );
+
+  player.angle+=
+    steering;
+
+  player.x+=
+    Math.cos(player.angle)*
+    player.speed*
+    .30*
+    dt;
+
+  player.y+=
+    Math.sin(player.angle)*
+    player.speed*
+    .30*
+    dt;
+
+  const n=
+    nearest(
+      player.x,
+      player.y
+    );
+
+  if(
+    n.d>roadWidth
+  ){
+
+    player.speed*=
+      Math.pow(
+        .94,
+        dt*60
+      );
+  }
+
+  if(
+    n.d>
+    roadWidth*2.2
+  ){
+
+    player.x=n.x;
+    player.y=n.y;
+
+    player.angle=
+      tangentAt(n.i);
+
+    player.speed*=.3;
+
+    incidents++;
+
+    showBanner(
+      "AUSLAUFZONE",
+      600
+    );
+  }
+
+  if(player.speed>50){
+
+    tireWear+=
+      dt*
+      (
+        .015+
+        player.speed/20000
+      );
+  }
+
+  tireWear=
+    clamp(
+      tireWear,
+      0,
+      100
+    );
+
+  player.idx=n.i;
+}
+
+/* ================= RUNDEN ================= */
+
+function updateLaps(now){
+
+  const n=
+    nearest(
+      player.x,
+      player.y
+    );
+
+  const idx=n.i;
+
+  if(
+    player.idx>
+    center.length*.8 &&
+    idx<
+    center.length*.2 &&
+    player.speed>20
+  ){
+
+    const lapTime=
+      now-player.lapStart;
+
+    if(player.lap>0){
+
+      player.bestLap=
+        Math.min(
+          player.bestLap,
+          lapTime
+        );
+    }
+
+    player.lap++;
+
+    player.lapStart=now;
+
+    showBanner(
+      "RUNDE "+player.lap,
+      700
+    );
+
+    if(
+      sessionType==="race" &&
+      player.lap>=3
+    ){
+
+      finishRace();
+
+      return;
+    }
+  }
+}
+
+/* ================= KOLLISIONEN ================= */
+
+function checkCollisions(){
+
+  for(const ai of ais){
+
+    const d=
+      Math.hypot(
+        player.x-ai.x,
+        player.y-ai.y
+      );
+
+    if(d<27){
+
+      const dx=
+        player.x-ai.x;
+
+      const dy=
+        player.y-ai.y;
+
+      const len=
+        Math.max(
+          1,
+          Math.hypot(dx,dy)
+        );
+
+      player.x+=
+        dx/len*4;
+
+      player.y+=
+        dy/len*4;
+
+      player.speed*=.75;
+
+      ai.speed*=.88;
+
+      incidents++;
+    }
+  }
+}
+
+/* ================= POSITION ================= */
+
+function getPosition(){
+
+  const playerProgress=
+    player.lap*
+    center.length+
+    player.idx;
+
+  let position=1;
+
+  ais.forEach(ai=>{
+
+    const progress=
+      ai.lap*
+      center.length+
+      ai.idx;
+
+    if(
+      progress>
+      playerProgress
+    )
+      position++;
+  });
+
+  return position;
+}
+
+/* ================= TRACK DRAW ================= */
+
+function drawTrack(){
+
+  if(center.length<2)
+    return;
+
+  ctx.fillStyle="#10251a";
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+  ctx.beginPath();
+
+  center.forEach((p,i)=>{
+
+    if(i===0)
+      ctx.moveTo(p.x,p.y);
+    else
+      ctx.lineTo(p.x,p.y);
+  });
+
+  ctx.closePath();
+
+  ctx.lineWidth=
+    roadWidth+24;
+
+  ctx.lineCap="round";
+  ctx.lineJoin="round";
+
+  ctx.strokeStyle=
+    "rgba(0,0,0,.35)";
+
+  ctx.stroke();
+
+  ctx.beginPath();
+
+  center.forEach((p,i)=>{
+
+    if(i===0)
+      ctx.moveTo(p.x,p.y);
+    else
+      ctx.lineTo(p.x,p.y);
+  });
+
+  ctx.closePath();
+
+  ctx.lineWidth=
+    roadWidth+12;
+
+  ctx.strokeStyle="#d7d7d7";
+
+  ctx.stroke();
+
+  for(
+    let i=0;
+    i<center.length;
+    i+=8
+  ){
+
+    const a=
+      pointAt(i);
+
+    const b=
+      pointAt(i+3);
+
+    ctx.beginPath();
+
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+
+    ctx.lineWidth=
+      roadWidth+12;
+
+    ctx.strokeStyle="#d33e48";
+
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+
+  center.forEach((p,i)=>{
+
+    if(i===0)
+      ctx.moveTo(p.x,p.y);
+    else
+      ctx.lineTo(p.x,p.y);
+  });
+
+  ctx.closePath();
+
+  ctx.lineWidth=roadWidth;
+
+  ctx.strokeStyle="#343a40";
+
+  ctx.stroke();
+
+  ctx.beginPath();
+
+  center.forEach((p,i)=>{
+
+    if(i===0)
+      ctx.moveTo(p.x,p.y);
+    else
+      ctx.lineTo(p.x,p.y);
+  });
+
+  ctx.closePath();
+
+  ctx.lineWidth=2;
+
+  ctx.strokeStyle=
+    "rgba(255,255,255,.22)";
+
+  ctx.setLineDash([
+    12,
+    18
+  ]);
+
+  ctx.stroke();
+
+  ctx.setLineDash([]);
+
+  const s=
+    pointAt(0);
+
+  const tangent=
+    tangentAt(0);
+
+  const nx=
+    -Math.sin(tangent);
+
+  const ny=
+    Math.cos(tangent);
+
+  const half=
+    roadWidth/2;
+
+  ctx.save();
+
+  ctx.strokeStyle="white";
+  ctx.lineWidth=5;
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    s.x-nx*half,
+    s.y-ny*half
+  );
+
+  ctx.lineTo(
+    s.x+nx*half,
+    s.y+ny*half
+  );
+
+  ctx.stroke();
+
+  ctx.restore();
+
+  if(showIdealLine){
+
+    ctx.beginPath();
+
+    center.forEach((p,i)=>{
+
+      if(i===0)
+        ctx.moveTo(p.x,p.y);
+      else
+        ctx.lineTo(p.x,p.y);
+    });
+
+    ctx.closePath();
+
+    ctx.lineWidth=2;
+
+    ctx.strokeStyle=
+      "rgba(60,220,150,.65)";
+
+    ctx.setLineDash([
+      5,
+      9
+    ]);
+
+    ctx.stroke();
+
+    ctx.setLineDash([]);
+  }
+}
+
+/* ================= AUTOS ================= */
+
+function drawCar(
+  x,
+  y,
+  angle,
+  color,
+  scale=1
+){
+
+  ctx.save();
+
+  ctx.translate(x,y);
+
+  ctx.rotate(angle);
+
+  ctx.scale(
+    scale,
+    scale
+  );
+
+  ctx.fillStyle=
+    "rgba(0,0,0,.4)";
+
+  ctx.fillRect(
+    -17,
+    -8,
+    36,
+    18
+  );
+
+  ctx.fillStyle="#080909";
+
+  ctx.fillRect(
+    -14,
+    -11,
+    8,
+    5
+  );
+
+  ctx.fillRect(
+    6,
+    -11,
+    8,
+    5
+  );
+
+  ctx.fillRect(
+    -14,
+    6,
+    8,
+    5
+  );
+
+  ctx.fillRect(
+    6,
+    6,
+    8,
+    5
+  );
+
+  ctx.fillStyle=color;
+
+  ctx.beginPath();
+
+  ctx.roundRect(
+    -18,
+    -8,
+    36,
+    16,
+    5
+  );
+
+  ctx.fill();
+
+  ctx.fillStyle="#111820";
+
+  ctx.beginPath();
+
+  ctx.roundRect(
+    -5,
+    -6,
+    11,
+    12,
+    3
+  );
+
+  ctx.fill();
+
+  ctx.fillStyle="#111";
+
+  ctx.fillRect(
+    -18,
+    -10,
+    5,
+    20
+  );
+
+  ctx.restore();
+}
+
+function drawCars(){
+
+  ais.forEach(ai=>{
+
+    drawCar(
+      ai.x,
+      ai.y,
+      ai.angle,
+      ai.color,
+      .82
+    );
+  });
+
+  drawCar(
+    player.x,
+    player.y,
+    player.angle,
+    cars[selectedCar].color,
+    1
+  );
+}
+
+/* ================= HUD ================= */
+
+function updateHUD(){
+
+  document.getElementById(
+    "hudPosition"
+  ).textContent=
+    "P"+getPosition();
+
+  document.getElementById(
+    "hudLap"
+  ).textContent=
+    `${Math.min(player.lap+1,3)}/3`;
+
+  document.getElementById(
+    "hudSpeed"
+  ).textContent=
+    Math.round(
+      player.speed
+    )+
+    " km/h";
+}
+
+/* ================= BANNER ================= */
+
+let bannerTimer=null;
+
+function showBanner(
+  text,
+  time=800
+){
+
+  const b=
+    document.getElementById("banner");
+
+  b.textContent=text;
+
+  b.style.display="block";
+
+  clearTimeout(
+    bannerTimer
+  );
+
+  bannerTimer=
+    setTimeout(
+      ()=>{
+        b.style.display="none";
+      },
+      time
+    );
+}
+
+/* ================= GAME LOOP ================= */
+
+function loop(now){
+
+  if(!raceActive)
+    return;
+
+  const dt=
+    Math.min(
+      (now-lastFrame)/1000,
+      .04
+    );
+
+  lastFrame=now;
+
+  if(!paused){
+
+    updatePlayer(dt);
+
+    ais.forEach(
+      ai=>updateAI(ai,dt)
+    );
+
+    checkCollisions();
+
+    updateLaps(now);
+
+    draw();
+
+    updateHUD();
+  }
+
+  requestAnimationFrame(loop);
+}
+
+/* ================= DRAW ================= */
+
+function draw(){
+
+  ctx.clearRect(
+    0,
+    0,
+    W,
+    H
+  );
+
+  drawTrack();
+
+  drawCars();
+}
+
+/* ================= PAUSE ================= */
+
+function togglePause(){
+
+  paused=!paused;
+
+  document.getElementById(
+    "pauseBtn"
+  ).textContent=
+    paused
+    ?"▶"
+    :"Ⅱ";
+
+  if(paused){
+
+    showBanner(
+      "PAUSE",
+      999999
+    );
+
+  }else{
+
+    document.getElementById(
+      "banner"
+    ).style.display="none";
+  }
+}
+
+/* ================= RENNEN ENDE ================= */
+
+function finishRace(){
+
+  raceActive=false;
+
+  document.getElementById(
+    "gameCanvas"
+  ).style.display="none";
+
+  document.getElementById(
+    "hud"
+  ).style.display="none";
+
+  document.getElementById(
+    "touchControls"
+  ).style.display="none";
+
+  document.getElementById(
+    "pauseBtn"
+  ).style.display="none";
+
+  const position=
+    getPosition();
+
+  const total=
+    performance.now()-
+    raceStartTime;
+
+  const best=
+    player.bestLap===Infinity
+    ?"—"
+    :formatTime(
+      player.bestLap
+    );
+
+  document.getElementById(
+    "resultContent"
+  ).innerHTML=`
+
+    <div class="big">
+      P${position}
+    </div>
+
+    <p>
+      <b>Gesamtzeit</b><br>
+      ${formatTime(total)}
+    </p>
+
+    <p>
+      <b>Schnellste Runde</b><br>
+      ${best}
+    </p>
+
+    <p>
+      <b>Boxenstopps</b><br>
+      ${pitStops}
+    </p>
+
+    <p>
+      <b>Zwischenfälle</b><br>
+      ${incidents}
+    </p>
+
+    <p>
+      <b>Reifenverschleiss</b><br>
+      ${Math.round(tireWear)}%
+    </p>
+  `;
+
+  showScreen("result");
+}
+
+function formatTime(ms){
+
+  const total=
+    ms/1000;
+
+  const min=
+    Math.floor(
+      total/60
+    );
+
+  const sec=
+    total%60;
+
+  return(
+    String(min).padStart(2,"0")+
+    ":"+
+    sec.toFixed(3).padStart(6,"0")
+  );
+}
+
+/* ================= BOXENSTOPP ================= */
+
+let lastTap=0;
+
+function doPitStop(){
+
+  if(!raceActive)
+    return;
+
+  const now=
+    performance.now();
+
+  if(
+    now-lastTap<450
+  ){
+
+    pitStops++;
+
+    tireWear=
+      Math.max(
+        0,
+        tireWear-45
+      );
+
+    player.speed=0;
+
+    showBanner(
+      "🔧 BOXENSTOPP",
+      1800
+    );
+  }
+
+  lastTap=now;
+}
+
+document.addEventListener(
+  "dblclick",
+  e=>{
+    if(raceActive)
+      doPitStop();
+  }
+);
+
+/* ================= TASTATUR ================= */
+
+window.addEventListener(
+  "keydown",
+  e=>{
+
+    if(e.key==="ArrowLeft")
+      keys.left=true;
+
+    if(e.key==="ArrowRight")
+      keys.right=true;
+
+    if(e.key==="ArrowUp")
+      keys.gas=true;
+
+    if(e.key==="ArrowDown")
+      keys.brake=true;
+
+    if(e.key==="p")
+      togglePause();
+
+    if(e.key==="b")
+      doPitStop();
+  }
+);
+
+window.addEventListener(
+  "keyup",
+  e=>{
+
+    if(e.key==="ArrowLeft")
+      keys.left=false;
+
+    if(e.key==="ArrowRight")
+      keys.right=false;
+
+    if(e.key==="ArrowUp")
+      keys.gas=false;
+
+    if(e.key==="ArrowDown")
+      keys.brake=false;
+  }
+);
+
+/* ================= TOUCH ================= */
+
+function setupTouch(
+  id,
+  key
+){
+
+  const el=
+    document.getElementById(id);
+
+  const start=e=>{
+    e.preventDefault();
+    keys[key]=true;
+  };
+
+  const end=e=>{
+    e.preventDefault();
+    keys[key]=false;
+  };
+
+  el.addEventListener(
+    "touchstart",
+    start,
+    {passive:false}
+  );
+
+  el.addEventListener(
+    "touchend",
+    end,
+    {passive:false}
+  );
+
+  el.addEventListener(
+    "touchcancel",
+    end,
+    {passive:false}
+  );
+
+  el.addEventListener(
+    "mousedown",
+    start
+  );
+
+  el.addEventListener(
+    "mouseup",
+    end
+  );
+
+  el.addEventListener(
+    "mouseleave",
+    end
+  );
+}
+
+setupTouch(
+  "leftBtn",
+  "left"
+);
+
+setupTouch(
+  "rightBtn",
+  "right"
+);
+
+setupTouch(
+  "gasBtn",
+  "gas"
+);
+
+setupTouch(
+  "brakeBtn",
+  "brake"
+);
+
+/* ================= DRAWING EVENTS ================= */
+
+drawCanvas.addEventListener(
+  "touchstart",
+  startDrawing,
+  {passive:false}
+);
+
+drawCanvas.addEventListener(
+  "touchmove",
+  moveDrawing,
+  {passive:false}
+);
+
+drawCanvas.addEventListener(
+  "touchend",
+  stopDrawing,
+  {passive:false}
+);
+
+drawCanvas.addEventListener(
+  "mousedown",
+  startDrawing
+);
+
+drawCanvas.addEventListener(
+  "mousemove",
+  moveDrawing
+);
+
+drawCanvas.addEventListener(
+  "mouseup",
+  stopDrawing
+);
+
+/* ================= START ================= */
+
+selectedCar=
+  Number(
+    localStorage.getItem(
+      "trackforge_car"
+    )||0
+  );
+
+currentTrack=
+  Number(
+    localStorage.getItem(
+      "trackforge_track"
+    )||0
+  );
+
+resizeGame();
+
+if(
+  savedTracks[currentTrack]
+){
+
+  center=
+    savedTracks[currentTrack]
+      .points
+      .map(p=>({
+        x:p.x,
+        y:p.y
+      }));
+}
+
+renderGarage();
+
+updateWeekendInfo();
+
+updateSettings();
+
+</script>
+
+</body>
+</html>
