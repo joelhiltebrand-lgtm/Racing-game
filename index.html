@@ -5,413 +5,417 @@
 <meta name="viewport"
       content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 
-<title>TrackDraw Racing</title>
+<title>Murder on the Aurora</title>
 
 <style>
 *{
   box-sizing:border-box;
   -webkit-tap-highlight-color:transparent;
-  user-select:none;
 }
 
 html,body{
   margin:0;
   width:100%;
-  min-height:100%;
+  height:100%;
   overflow:hidden;
-  background:#090b0f;
-  font-family:Arial,Helvetica,sans-serif;
+  background:#07111d;
   color:white;
+  font-family:Arial,sans-serif;
 }
 
 button{
-  border:0;
-  outline:0;
   font:inherit;
 }
 
 #app{
   width:100%;
-  height:100dvh;
+  height:100%;
   position:relative;
   overflow:hidden;
-  background:
-    radial-gradient(circle at 50% 20%,#202631 0,#0c0f14 55%,#050608 100%);
 }
-
-/* =========================
-   MENÜ
-========================= */
 
 .screen{
   position:absolute;
   inset:0;
   display:none;
-  flex-direction:column;
 }
 
 .screen.active{
-  display:flex;
+  display:block;
 }
 
-.menu{
-  align-items:center;
-  justify-content:center;
-  padding:25px;
+/* MENU */
+
+#menu{
+  background:
+    radial-gradient(circle at 50% 35%,#23435d 0,#0d1d2c 45%,#050b12 100%);
+  text-align:center;
+  padding:70px 22px 30px;
 }
 
 .logo{
   font-size:42px;
-  font-weight:1000;
-  letter-spacing:-3px;
-  font-style:italic;
-  margin-bottom:5px;
-}
-
-.logo span{
-  color:#ff3b30;
-}
-
-.subtitle{
-  color:#8e969f;
-  margin-bottom:35px;
-  font-size:14px;
-}
-
-.menuButtons{
-  width:min(390px,90%);
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-.menuBtn{
-  min-height:58px;
-  border-radius:15px;
-  background:#191e25;
-  border:1px solid #303740;
-  color:white;
   font-weight:900;
-  font-size:17px;
+  letter-spacing:2px;
+  text-shadow:0 4px 20px #000;
 }
 
-.menuBtn.primary{
-  background:#e52d25;
-  border-color:#ff5047;
-  box-shadow:0 7px 25px #ff332733;
-}
-
-.menuBtn:active{
-  transform:scale(.97);
-}
-
-/* =========================
-   TOP BAR
-========================= */
-
-.top{
-  height:65px;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 15px;
-  background:#0b0d11dd;
-  border-bottom:1px solid #252a31;
-  z-index:10;
-}
-
-.topTitle{
-  font-weight:1000;
-  font-size:20px;
-}
-
-.back{
-  width:45px;
-  height:45px;
-  border-radius:12px;
-  background:#1a1f26;
-  color:white;
-  font-size:22px;
-}
-
-.action{
-  min-height:44px;
-  padding:0 16px;
-  border-radius:12px;
-  background:#e52d25;
-  color:white;
-  font-weight:900;
-}
-
-/* =========================
-   DRAW
-========================= */
-
-.drawScreen{
-  background:#101318;
-}
-
-.drawArea{
-  position:relative;
-  flex:1;
-  min-height:0;
-  overflow:hidden;
-  background:
-    linear-gradient(#ffffff08 1px,transparent 1px),
-    linear-gradient(90deg,#ffffff08 1px,transparent 1px),
-    #15191e;
-  background-size:30px 30px;
-  touch-action:none;
-}
-
-#drawCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  touch-action:none;
-}
-
-.drawInfo{
-  position:absolute;
-  top:15px;
-  left:15px;
-  right:15px;
-  pointer-events:none;
-}
-
-.infoBox{
-  display:inline-block;
-  padding:9px 12px;
-  border-radius:10px;
-  background:#080a0dcc;
-  border:1px solid #ffffff15;
-  font-size:12px;
-  color:#bfc5cb;
-}
-
-.drawBottom{
-  padding:12px;
-  display:flex;
-  gap:9px;
-  background:#0b0d11;
-  border-top:1px solid #252a31;
-}
-
-.drawBottom button{
-  flex:1;
-  height:50px;
-  border-radius:13px;
-  background:#20252c;
-  color:white;
-  font-weight:900;
-}
-
-.drawBottom .go{
-  background:#e52d25;
-}
-
-/* =========================
-   GARAGE
-========================= */
-
-.garage{
-  padding:20px;
-  overflow:auto;
-}
-
-.carGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  max-width:600px;
-  margin:auto;
-}
-
-.carCard{
-  background:#171b21;
-  border:1px solid #303640;
-  border-radius:18px;
-  padding:15px;
-  min-height:170px;
-}
-
-.carCard.selected{
-  border:2px solid #ff3b30;
-  background:#211719;
-}
-
-.carVisual{
-  height:85px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  position:relative;
-}
-
-.miniCar{
-  width:115px;
-  height:30px;
-  background:#e52d25;
-  border-radius:45% 55% 25% 25%;
-  position:relative;
-  transform:skewX(-8deg);
-}
-
-.miniCar:before{
-  content:"";
-  position:absolute;
-  width:48px;
-  height:18px;
-  background:#222a33;
-  left:35px;
-  top:-10px;
-  border-radius:8px 12px 2px 2px;
-}
-
-.wheel{
-  position:absolute;
-  width:19px;
-  height:19px;
-  background:#080909;
-  border-radius:50%;
-  bottom:-9px;
-}
-
-.w1{left:16px}
-.w2{right:16px}
-
-.carName{
-  font-weight:1000;
-}
-
-.carStats{
-  color:#89919b;
-  font-size:12px;
-  margin-top:5px;
-}
-
-/* =========================
-   RACE
-========================= */
-
-.race{
-  background:#090b0e;
-}
-
-#raceCanvas{
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-}
-
-.hud{
-  position:absolute;
-  inset:0;
-  pointer-events:none;
-}
-
-.hudTop{
-  position:absolute;
-  top:15px;
-  left:15px;
-  right:15px;
-  display:flex;
-  justify-content:space-between;
-}
-
-.hudBox{
-  padding:10px 13px;
-  border-radius:12px;
-  background:#07090dcc;
-  border:1px solid #ffffff16;
-  font-weight:900;
-  font-size:13px;
-}
-
-.controls{
-  position:absolute;
-  bottom:20px;
-  left:0;
-  right:0;
-  display:flex;
-  justify-content:space-between;
-  padding:0 18px;
-  pointer-events:auto;
-}
-
-.steer{
-  display:flex;
-  gap:10px;
-}
-
-.controlBtn{
-  width:68px;
-  height:68px;
-  border-radius:50%;
-  background:#161b21d9;
-  border:1px solid #ffffff22;
-  color:white;
-  font-size:25px;
-  font-weight:900;
-  touch-action:none;
-}
-
-.controlBtn:active{
-  background:#303640;
-}
-
-.brake{
-  background:#b8201bd9;
+.sub{
+  color:#9fc1d7;
+  margin:10px 0 50px;
   font-size:15px;
 }
 
-.pause{
-  position:absolute;
-  top:80px;
-  right:15px;
-  width:45px;
-  height:45px;
-  border-radius:12px;
-  background:#11151bdd;
-  color:white;
-  pointer-events:auto;
+.bigBtn{
+  width:min(360px,90%);
+  border:0;
+  border-radius:16px;
+  padding:16px 18px;
+  background:#e9f4fa;
+  color:#08111a;
+  font-weight:800;
+  font-size:20px;
+  margin:8px;
+  box-shadow:0 8px 20px #0005;
 }
 
-/* =========================
-   RESULT
-========================= */
+/* GAME */
 
-.result{
+#game{
+  background:#09131e;
+}
+
+.top{
+  height:72px;
+  padding:10px 12px;
+  padding-top:calc(10px + env(safe-area-inset-top));
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:#0d1b29;
+  border-bottom:1px solid #284156;
+  position:relative;
+  z-index:5;
+}
+
+.title{
+  font-weight:900;
+}
+
+.stats{
+  display:flex;
+  gap:7px;
+  font-size:12px;
+}
+
+.pill{
+  background:#172c3d;
+  padding:8px 10px;
+  border-radius:12px;
+}
+
+#scene{
+  position:absolute;
+  top:72px;
+  bottom:110px;
+  left:0;
+  right:0;
+  overflow:hidden;
+}
+
+.room{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(
+      #14293a 0 52%,
+      #25313a 52% 100%
+    );
+}
+
+.wall{
+  position:absolute;
+  left:7%;
+  right:7%;
+  top:8%;
+  height:44%;
+  border:3px solid #526d7d;
+  background:
+    linear-gradient(90deg,#203b4d,#132634);
+  box-shadow:inset 0 0 50px #0008;
+}
+
+.floor{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:48%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      #4a4037 0 55px,
+      #40372f 55px 110px
+    );
+  transform:perspective(300px) rotateX(3deg);
+  transform-origin:bottom;
+}
+
+.object{
+  position:absolute;
+  border:2px solid #7992a1;
+  background:#263c4a;
+  box-shadow:0 8px 15px #0008;
+  display:flex;
   align-items:center;
   justify-content:center;
-  padding:25px;
-  background:#080a0e;
+  text-align:center;
+  font-weight:800;
+  color:#dcecf5;
 }
 
-.result h1{
-  font-size:42px;
-  margin:0 0 8px;
+.door{
+  width:18%;
+  height:42%;
+  left:41%;
+  top:17%;
+  background:#382b22;
 }
 
-.resultTime{
-  font-size:28px;
-  font-weight:1000;
-  color:#ff493f;
-  margin-bottom:30px;
+.window{
+  width:24%;
+  height:25%;
+  left:10%;
+  top:17%;
+  background:linear-gradient(#4c9bc0,#182f42);
+  border-color:#9ac7da;
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
+.table{
+  width:35%;
+  height:18%;
+  left:33%;
+  bottom:25%;
+  background:#594735;
+}
 
-@media(max-width:380px){
-  .logo{font-size:35px}
-  .controlBtn{
-    width:60px;
-    height:60px;
+.bed{
+  width:40%;
+  height:20%;
+  right:8%;
+  bottom:20%;
+  background:#667e8c;
+}
+
+.interact{
+  position:absolute;
+  z-index:4;
+  border:0;
+  background:#ffffff18;
+  color:#fff;
+  border-radius:12px;
+  padding:8px 10px;
+  font-size:11px;
+  font-weight:800;
+  backdrop-filter:blur(4px);
+}
+
+/* DIALOG */
+
+#dialog{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:120px;
+  z-index:10;
+  background:#0b1723f2;
+  border:1px solid #49667a;
+  border-radius:20px;
+  padding:16px;
+  box-shadow:0 15px 35px #0009;
+  display:none;
+}
+
+#dialog.show{
+  display:block;
+}
+
+#dialog h3{
+  margin:0 0 7px;
+}
+
+.dialogText{
+  color:#c9dbe5;
+  line-height:1.4;
+  font-size:14px;
+  margin-bottom:12px;
+}
+
+.choices{
+  display:grid;
+  gap:8px;
+}
+
+.choice{
+  border:1px solid #34566b;
+  border-radius:14px;
+  padding:12px;
+  background:#183044;
+  color:white;
+  text-align:left;
+  font-size:14px;
+}
+
+/* NAVIGATION */
+
+#bottom{
+  position:absolute;
+  bottom:0;
+  left:0;
+  right:0;
+  height:110px;
+  background:#0b1723;
+  border-top:1px solid #284156;
+  display:flex;
+  align-items:center;
+  justify-content:space-around;
+  padding-bottom:env(safe-area-inset-bottom);
+  z-index:6;
+}
+
+.nav{
+  background:#14283a;
+  color:#d8eaf4;
+  border:1px solid #29465a;
+  border-radius:14px;
+  padding:10px 12px;
+  font-size:12px;
+  font-weight:800;
+}
+
+/* TOAST */
+
+#toast{
+  position:absolute;
+  top:82px;
+  left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  background:#e9f4fa;
+  color:#07111a;
+  padding:11px 15px;
+  border-radius:14px;
+  font-weight:800;
+  font-size:13px;
+  opacity:0;
+  pointer-events:none;
+  transition:.25s;
+  z-index:30;
+  white-space:nowrap;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateX(-50%) translateY(0);
+}
+
+/* OVERLAY */
+
+#overlay{
+  position:absolute;
+  inset:0;
+  background:#02070de8;
+  z-index:40;
+  display:none;
+  padding:25px 18px;
+  padding-top:calc(25px + env(safe-area-inset-top));
+  overflow:auto;
+}
+
+#overlay.show{
+  display:block;
+}
+
+.panel{
+  max-width:520px;
+  margin:0 auto;
+  background:#0c1925;
+  border:1px solid #365266;
+  border-radius:22px;
+  padding:20px;
+  box-shadow:0 20px 50px #000;
+}
+
+.panel h2{
+  margin-top:0;
+}
+
+.close{
+  float:right;
+  background:#263f50;
+  color:white;
+  border:0;
+  border-radius:10px;
+  padding:7px 10px;
+}
+
+.clue{
+  background:#132839;
+  border-radius:13px;
+  padding:11px;
+  margin:8px 0;
+  color:#cde0ea;
+  font-size:14px;
+}
+
+#mapList{
+  display:grid;
+  gap:9px;
+  margin-top:12px;
+}
+
+.roomBtn{
+  background:#173043;
+  border:1px solid #34566b;
+  color:white;
+  border-radius:14px;
+  padding:14px;
+  text-align:left;
+  font-weight:800;
+  width:100%;
+}
+
+.accuse{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:15px;
+}
+
+.accuse button{
+  border:0;
+  border-radius:14px;
+  padding:13px;
+  background:#243f52;
+  color:white;
+  font-weight:800;
+}
+
+@media(max-height:650px){
+
+  .logo{
+    font-size:34px;
+  }
+
+  .sub{
+    margin-bottom:25px;
+  }
+
+  #scene{
+    bottom:100px;
+  }
+
+  #dialog{
+    bottom:108px;
   }
 }
 </style>
@@ -421,201 +425,86 @@ button{
 
 <div id="app">
 
-<!-- ================= MENU ================= -->
+<!-- STARTMENÜ -->
 
-<section id="menu" class="screen active menu">
+<section id="menu" class="screen active">
 
   <div class="logo">
-    TRACK<span>DRAW</span>
+    MURDER<br>
+    ON THE AURORA
   </div>
 
-  <div class="subtitle">
-    DRAW • DRIVE • RACE
+  <div class="sub">
+    Ein Mystery-Abenteuer auf hoher See
   </div>
 
-  <div class="menuButtons">
-    <button class="menuBtn primary" id="drawBtn">
-      ✏️ STRECKE ZEICHNEN
-    </button>
-
-    <button class="menuBtn" id="garageBtn">
-      🚗 GARAGE
-    </button>
-
-    <button class="menuBtn" id="raceBtn">
-      🏁 FAHREN
-    </button>
-  </div>
-
-</section>
-
-
-<!-- ================= DRAW ================= -->
-
-<section id="drawScreen" class="screen drawScreen">
-
-  <div class="top">
-    <button class="back" id="drawBack">‹</button>
-    <div class="topTitle">STRECKE ZEICHNEN</div>
-    <button class="action" id="finishDraw">FERTIG</button>
-  </div>
-
-  <div class="drawArea">
-
-    <canvas id="drawCanvas"></canvas>
-
-    <div class="drawInfo">
-      <div class="infoBox">
-        Zeichne eine geschlossene Rennstrecke
-      </div>
-    </div>
-
-  </div>
-
-  <div class="drawBottom">
-    <button id="clearDraw">
-      LÖSCHEN
-    </button>
-
-    <button id="smoothDraw">
-      GLÄTTEN
-    </button>
-
-    <button class="go" id="useTrack">
-      FAHREN
-    </button>
-  </div>
-
-</section>
-
-
-<!-- ================= GARAGE ================= -->
-
-<section id="garage" class="screen">
-
-  <div class="top">
-    <button class="back" id="garageBack">‹</button>
-    <div class="topTitle">GARAGE</div>
-    <div style="width:45px"></div>
-  </div>
-
-  <div class="garage">
-
-    <div class="carGrid">
-
-      <div class="carCard selected" data-car="formula">
-        <div class="carVisual">
-          <div class="miniCar">
-            <i class="wheel w1"></i>
-            <i class="wheel w2"></i>
-          </div>
-        </div>
-        <div class="carName">FORMULA X</div>
-        <div class="carStats">★★★★★ Geschwindigkeit</div>
-      </div>
-
-      <div class="carCard" data-car="gt">
-        <div class="carVisual">
-          <div class="miniCar" style="background:#3182ce">
-            <i class="wheel w1"></i>
-            <i class="wheel w2"></i>
-          </div>
-        </div>
-        <div class="carName">GT-RS</div>
-        <div class="carStats">★★★★☆ Kontrolle</div>
-      </div>
-
-      <div class="carCard" data-car="v8">
-        <div class="carVisual">
-          <div class="miniCar" style="background:#f1b52b">
-            <i class="wheel w1"></i>
-            <i class="wheel w2"></i>
-          </div>
-        </div>
-        <div class="carName">SUPER V8</div>
-        <div class="carStats">★★★★★ Power</div>
-      </div>
-
-      <div class="carCard" data-car="rally">
-        <div class="carVisual">
-          <div class="miniCar" style="background:#39a852">
-            <i class="wheel w1"></i>
-            <i class="wheel w2"></i>
-          </div>
-        </div>
-        <div class="carName">RALLY R</div>
-        <div class="carStats">★★★★★ Grip</div>
-      </div>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= RACE ================= -->
-
-<section id="race" class="screen race">
-
-  <canvas id="raceCanvas"></canvas>
-
-  <div class="hud">
-
-    <div class="hudTop">
-      <div class="hudBox">
-        LAP <span id="lap">1</span>/3
-      </div>
-
-      <div class="hudBox">
-        <span id="time">0.00</span>
-      </div>
-    </div>
-
-    <button class="pause" id="pauseBtn">
-      II
-    </button>
-
-    <div class="controls">
-
-      <div class="steer">
-        <button class="controlBtn" id="leftBtn">
-          ‹
-        </button>
-
-        <button class="controlBtn" id="rightBtn">
-          ›
-        </button>
-      </div>
-
-      <button class="controlBtn brake" id="brakeBtn">
-        BRAKE
-      </button>
-
-    </div>
-
-  </div>
-
-</section>
-
-
-<!-- ================= RESULT ================= -->
-
-<section id="result" class="screen result">
-
-  <h1>🏁 FINISH</h1>
-
-  <div class="resultTime" id="finalTime">
-    0.00 s
-  </div>
-
-  <button class="menuBtn primary" id="againBtn">
-    NOCHMAL FAHREN
+  <button class="bigBtn" onclick="startGame()">
+    ▶ SPIEL STARTEN
   </button>
 
-  <button class="menuBtn" id="resultMenuBtn">
-    HAUPTMENÜ
+  <br>
+
+  <button class="bigBtn" onclick="showHow()">
+    ❓ SO SPIELST DU
   </button>
+
+</section>
+
+
+<!-- SPIEL -->
+
+<section id="game" class="screen">
+
+  <div class="top">
+
+    <div class="title">
+      🚢 MS AURORA
+    </div>
+
+    <div class="stats">
+
+      <span class="pill">
+        ⏱ <span id="time">22:00</span>
+      </span>
+
+      <span class="pill">
+        🔎 <span id="clueCount">0</span>
+      </span>
+
+    </div>
+
+  </div>
+
+
+  <div id="scene"></div>
+
+  <div id="dialog"></div>
+
+  <div id="toast"></div>
+
+
+  <div id="bottom">
+
+    <button class="nav" onclick="openMap()">
+      🗺️ KARTE
+    </button>
+
+    <button class="nav" onclick="openClues()">
+      🔎 HINWEISE
+    </button>
+
+    <button class="nav" onclick="talkMenu()">
+      👥 PERSONEN
+    </button>
+
+    <button class="nav" onclick="accusation()">
+      ⚖️ ANKLAGE
+    </button>
+
+  </div>
+
+
+  <div id="overlay"></div>
 
 </section>
 
@@ -623,1059 +512,913 @@ button{
 
 
 <script>
-/* ============================================================
-   TRACKDRAW ENGINE
-============================================================ */
 
-const $ = id => document.getElementById(id);
-
-const screens = {
-  menu: $("menu"),
-  draw: $("drawScreen"),
-  garage: $("garage"),
-  race: $("race"),
-  result: $("result")
-};
-
-function show(name){
-  Object.values(screens).forEach(s => s.classList.remove("active"));
-  screens[name].classList.add("active");
-}
-
-
-/* ============================================================
-   STATE
-============================================================ */
-
-let selectedCar = "formula";
-
-let track = [];
-
-let raceState = {
-  running:false,
-  paused:false,
-  progress:0,
-  lap:1,
-  startTime:0,
-  elapsed:0,
-  speed:0,
-  angle:0,
-  x:0,
-  y:0,
-  crashed:false
+let state={
+  room:"Kabine",
+  clues:[],
+  time:22*60,
+  started:false,
+  flags:{}
 };
 
 
-/* ============================================================
-   DRAW CANVAS
-============================================================ */
+const rooms={
 
-const drawCanvas = $("drawCanvas");
-const dctx = drawCanvas.getContext("2d");
+  "Kabine":{
+    type:"cabin"
+  },
 
-let drawing = false;
+  "Deck 7":{
+    type:"deck"
+  },
 
-function resizeDrawCanvas(){
+  "Lounge":{
+    type:"lounge"
+  },
 
-  const rect = drawCanvas.parentElement.getBoundingClientRect();
+  "Fitnessraum":{
+    type:"gym"
+  },
 
-  drawCanvas.width = Math.max(300,Math.floor(rect.width));
-  drawCanvas.height = Math.max(300,Math.floor(rect.height));
-
-  drawTrack();
-}
-
-function drawTrack(){
-
-  dctx.clearRect(
-    0,
-    0,
-    drawCanvas.width,
-    drawCanvas.height
-  );
-
-  if(track.length < 2){
-
-    dctx.fillStyle = "#707780";
-    dctx.font = "bold 18px Arial";
-    dctx.textAlign = "center";
-
-    dctx.fillText(
-      "Finger gedrückt halten und Strecke zeichnen",
-      drawCanvas.width/2,
-      drawCanvas.height/2
-    );
-
-    return;
+  "Brücke":{
+    type:"bridge"
   }
 
-  /* OUTER ROAD */
+};
 
-  dctx.beginPath();
 
-  dctx.moveTo(track[0].x,track[0].y);
+function startGame(){
 
-  for(let i=1;i<track.length;i++){
-    dctx.lineTo(track[i].x,track[i].y);
-  }
-
-  dctx.closePath();
-
-  dctx.lineCap = "round";
-  dctx.lineJoin = "round";
-
-  dctx.strokeStyle = "#858b91";
-  dctx.lineWidth = 105;
-  dctx.stroke();
-
-
-  /* ASPHALT */
-
-  dctx.beginPath();
-
-  dctx.moveTo(track[0].x,track[0].y);
-
-  for(let i=1;i<track.length;i++){
-    dctx.lineTo(track[i].x,track[i].y);
-  }
-
-  dctx.closePath();
-
-  dctx.strokeStyle = "#272b30";
-  dctx.lineWidth = 76;
-  dctx.stroke();
-
-
-  /* IDEALLINIE */
-
-  dctx.beginPath();
-
-  dctx.moveTo(track[0].x,track[0].y);
-
-  for(let i=1;i<track.length;i++){
-    dctx.lineTo(track[i].x,track[i].y);
-  }
-
-  dctx.closePath();
-
-  dctx.strokeStyle = "#ffffff";
-  dctx.lineWidth = 2;
-  dctx.setLineDash([14,14]);
-  dctx.stroke();
-  dctx.setLineDash([]);
-
-
-  /* START */
-
-  const p = track[0];
-
-  dctx.save();
-
-  dctx.translate(p.x,p.y);
-
-  dctx.fillStyle = "white";
-
-  dctx.fillRect(
-    -30,
-    -38,
-    60,
-    76
-  );
-
-  for(let x=-30;x<30;x+=15){
-
-    for(let y=-38;y<38;y+=15){
-
-      if(
-        ((x+30)/15 + (y+38)/15) % 2 === 0
-      ){
-
-        dctx.fillStyle = "#111";
-
-        dctx.fillRect(
-          x,
-          y,
-          15,
-          15
-        );
-
-      }
-
-    }
-
-  }
-
-  dctx.restore();
-}
-
-
-/* ============================================================
-   DRAWING
-============================================================ */
-
-function drawPosition(e){
-
-  const rect = drawCanvas.getBoundingClientRect();
-
-  return {
-    x:(e.clientX-rect.left)*
-      drawCanvas.width/rect.width,
-
-    y:(e.clientY-rect.top)*
-      drawCanvas.height/rect.height
-  };
-}
-
-
-drawCanvas.addEventListener(
-  "pointerdown",
-  e => {
-
-    if(screens.draw.classList.contains("active") === false)
-      return;
-
-    drawing = true;
-
-    track = [
-      drawPosition(e)
-    ];
-
-    drawCanvas.setPointerCapture(e.pointerId);
-
-    drawTrack();
-  }
-);
-
-
-drawCanvas.addEventListener(
-  "pointermove",
-  e => {
-
-    if(!drawing)
-      return;
-
-    const p = drawPosition(e);
-
-    const last =
-      track[track.length-1];
-
-    const distance =
-      Math.hypot(
-        p.x-last.x,
-        p.y-last.y
-      );
-
-    if(distance > 5){
-
-      track.push(p);
-
-      drawTrack();
-    }
-  }
-);
-
-
-drawCanvas.addEventListener(
-  "pointerup",
-  () => {
-
-    drawing = false;
-
-  }
-);
-
-
-drawCanvas.addEventListener(
-  "pointercancel",
-  () => {
-
-    drawing = false;
-
-  }
-);
-
-
-/* ============================================================
-   SMOOTH TRACK
-============================================================ */
-
-function smoothTrack(){
-
-  if(track.length < 8)
-    return;
-
-  const result = [];
-
-  for(let i=0;i<track.length;i++){
-
-    const prev =
-      track[
-        (i-1+track.length)%track.length
-      ];
-
-    const cur =
-      track[i];
-
-    const next =
-      track[
-        (i+1)%track.length
-      ];
-
-    result.push({
-
-      x:
-        (prev.x +
-        cur.x*2 +
-        next.x)/4,
-
-      y:
-        (prev.y +
-        cur.y*2 +
-        next.y)/4
-
-    });
-  }
-
-  track = result;
-
-  drawTrack();
-}
-
-
-/* ============================================================
-   GARAGE
-============================================================ */
-
-document
-.querySelectorAll(".carCard")
-.forEach(card => {
-
-  card.addEventListener(
-    "click",
-    () => {
-
-      document
-      .querySelectorAll(".carCard")
-      .forEach(c =>
-        c.classList.remove("selected")
-      );
-
-      card.classList.add("selected");
-
-      selectedCar =
-        card.dataset.car;
-    }
-  );
-
-});
-
-
-/* ============================================================
-   RACE CANVAS
-============================================================ */
-
-const raceCanvas = $("raceCanvas");
-const rctx = raceCanvas.getContext("2d");
-
-function resizeRace(){
-
-  raceCanvas.width =
-    window.innerWidth;
-
-  raceCanvas.height =
-    window.innerHeight;
-}
-
-
-/* ============================================================
-   TRACK FOR RACE
-============================================================ */
-
-function createDefaultTrack(){
-
-  if(track.length > 20)
-    return;
-
-  const w = raceCanvas.width;
-  const h = raceCanvas.height;
-
-  track = [];
-
-  const cx = w/2;
-  const cy = h/2;
-
-  const rx =
-    Math.min(w*0.35,260);
-
-  const ry =
-    Math.min(h*0.27,210);
-
-  for(let i=0;i<160;i++){
-
-    const a =
-      Math.PI*2*i/160;
-
-    track.push({
-
-      x:cx+
-        Math.cos(a)*rx,
-
-      y:cy+
-        Math.sin(a)*ry
-
-    });
-  }
-}
-
-
-/* ============================================================
-   RACE RENDER
-============================================================ */
-
-function renderRace(){
-
-  rctx.clearRect(
-    0,
-    0,
-    raceCanvas.width,
-    raceCanvas.height
-  );
-
-  if(track.length < 2)
-    return;
-
-
-  /* ROAD */
-
-  rctx.beginPath();
-
-  rctx.moveTo(
-    track[0].x,
-    track[0].y
-  );
-
-  for(let i=1;i<track.length;i++){
-
-    rctx.lineTo(
-      track[i].x,
-      track[i].y
-    );
-  }
-
-  rctx.closePath();
-
-  rctx.lineCap = "round";
-  rctx.lineJoin = "round";
-
-  rctx.strokeStyle = "#7c8187";
-  rctx.lineWidth = 112;
-  rctx.stroke();
-
-
-  /* ASPHALT */
-
-  rctx.beginPath();
-
-  rctx.moveTo(
-    track[0].x,
-    track[0].y
-  );
-
-  for(let i=1;i<track.length;i++){
-
-    rctx.lineTo(
-      track[i].x,
-      track[i].y
-    );
-  }
-
-  rctx.closePath();
-
-  rctx.strokeStyle = "#272a2e";
-  rctx.lineWidth = 80;
-  rctx.stroke();
-
-
-  /* IDEAL LINE */
-
-  rctx.beginPath();
-
-  rctx.moveTo(
-    track[0].x,
-    track[0].y
-  );
-
-  for(let i=1;i<track.length;i++){
-
-    rctx.lineTo(
-      track[i].x,
-      track[i].y
-    );
-  }
-
-  rctx.closePath();
-
-  rctx.strokeStyle =
-    "rgba(255,255,255,.25)";
-
-  rctx.lineWidth = 2;
-
-  rctx.setLineDash([12,12]);
-
-  rctx.stroke();
-
-  rctx.setLineDash([]);
-
-
-  /* CAR */
-
-  drawRaceCar();
-}
-
-
-/* ============================================================
-   CAR
-============================================================ */
-
-function drawRaceCar(){
-
-  const index =
-    Math.floor(
-      raceState.progress %
-      track.length
-    );
-
-  const p =
-    track[index];
-
-  const next =
-    track[
-      (index+2)%
-      track.length
-    ];
-
-  const angle =
-    Math.atan2(
-      next.y-p.y,
-      next.x-p.x
-    );
-
-  rctx.save();
-
-  rctx.translate(
-    p.x,
-    p.y
-  );
-
-  rctx.rotate(angle);
-
-  let carColor =
-    "#e52d25";
-
-  if(selectedCar === "gt")
-    carColor = "#3182ce";
-
-  if(selectedCar === "v8")
-    carColor = "#f1b52b";
-
-  if(selectedCar === "rally")
-    carColor = "#39a852";
-
-
-  /* shadow */
-
-  rctx.fillStyle =
-    "rgba(0,0,0,.4)";
-
-  rctx.fillRect(
-    -24,
-    -11,
-    48,
-    25
-  );
-
-
-  /* body */
-
-  rctx.fillStyle =
-    carColor;
-
-  rctx.beginPath();
-
-  rctx.roundRect(
-    -22,
-    -9,
-    44,
-    18,
-    5
-  );
-
-  rctx.fill();
-
-
-  /* cockpit */
-
-  rctx.fillStyle =
-    "#18202a";
-
-  rctx.beginPath();
-
-  rctx.roundRect(
-    -4,
-    -7,
-    15,
-    14,
-    3
-  );
-
-  rctx.fill();
-
-
-  /* wheels */
-
-  rctx.fillStyle =
-    "#070707";
-
-  rctx.fillRect(
-    -15,
-    -12,
-    9,
-    6
-  );
-
-  rctx.fillRect(
-    -15,
-    6,
-    9,
-    6
-  );
-
-  rctx.fillRect(
-    9,
-    -12,
-    9,
-    6
-  );
-
-  rctx.fillRect(
-    9,
-    6,
-    9,
-    6
-  );
-
-
-  rctx.restore();
-}
-
-
-/* ============================================================
-   CONTROLS
-============================================================ */
-
-let leftPressed = false;
-let rightPressed = false;
-let brakePressed = false;
-
-
-function holdButton(
-  element,
-  setter
-){
-
-  element.addEventListener(
-    "pointerdown",
-    e => {
-
-      e.preventDefault();
-
-      setter(true);
-
-    }
-  );
-
-  element.addEventListener(
-    "pointerup",
-    e => {
-
-      e.preventDefault();
-
-      setter(false);
-
-    }
-  );
-
-  element.addEventListener(
-    "pointercancel",
-    () => setter(false)
-  );
-
-  element.addEventListener(
-    "pointerleave",
-    () => setter(false)
-  );
-}
-
-
-holdButton(
-  $("leftBtn"),
-  v => leftPressed=v
-);
-
-holdButton(
-  $("rightBtn"),
-  v => rightPressed=v
-);
-
-holdButton(
-  $("brakeBtn"),
-  v => brakePressed=v
-);
-
-
-/* ============================================================
-   RACE PHYSICS
-============================================================ */
-
-let lastFrame = 0;
-
-function raceLoop(timestamp){
-
-  if(!raceState.running){
-
-    lastFrame = timestamp;
-
-    requestAnimationFrame(
-      raceLoop
-    );
-
-    return;
-  }
-
-  const dt =
-    Math.min(
-      (timestamp-lastFrame)/1000,
-      0.04
-    );
-
-  lastFrame = timestamp;
-
-
-  if(!raceState.paused){
-
-    let acceleration = 0.65;
-
-    if(brakePressed)
-      acceleration = -1.5;
-
-
-    raceState.speed +=
-      acceleration*dt;
-
-
-    raceState.speed =
-      Math.max(
-        0,
-        Math.min(
-          90,
-          raceState.speed
-        )
-      );
-
-
-    if(leftPressed)
-      raceState.progress -=
-        28*dt;
-
-    if(rightPressed)
-      raceState.progress +=
-        28*dt;
-
-
-    raceState.progress +=
-      raceState.speed*dt;
-
-
-    if(raceState.progress >= track.length){
-
-      raceState.progress -=
-        track.length;
-
-      raceState.lap++;
-
-      $("lap").textContent =
-        raceState.lap;
-
-
-      if(raceState.lap > 3){
-
-        finishRace();
-
-        requestAnimationFrame(
-          raceLoop
-        );
-
-        return;
-      }
-    }
-
-
-    raceState.elapsed =
-      (performance.now() -
-       raceState.startTime)/1000;
-
-    $("time").textContent =
-      raceState.elapsed.toFixed(2);
-  }
-
-
-  renderRace();
-
-  requestAnimationFrame(
-    raceLoop
-  );
-}
-
-
-/* ============================================================
-   START RACE
-============================================================ */
-
-function startRace(){
-
-  resizeRace();
-
-  createDefaultTrack();
-
-  show("race");
-
-  raceState = {
-
-    running:true,
-
-    paused:false,
-
-    progress:0,
-
-    lap:1,
-
-    startTime:performance.now(),
-
-    elapsed:0,
-
-    speed:10,
-
-    angle:0,
-
-    x:0,
-
-    y:0,
-
-    crashed:false
+  state={
+    room:"Kabine",
+    clues:[],
+    time:22*60,
+    started:true,
+    flags:{}
   };
 
-  $("lap").textContent = "1";
-  $("time").textContent = "0.00";
+  show("game");
 
-  requestAnimationFrame(
-    raceLoop
-  );
-}
+  renderRoom();
 
+  document.getElementById("clueCount").textContent="0";
+  document.getElementById("time").textContent="22:00";
 
-/* ============================================================
-   FINISH
-============================================================ */
+  toast("Der Alarm wurde ausgelöst!");
 
-function finishRace(){
+  setTimeout(()=>{
 
-  raceState.running = false;
-
-  $("finalTime").textContent =
-    raceState.elapsed.toFixed(2)
-    + " s";
-
-  show("result");
-}
-
-
-/* ============================================================
-   BUTTONS
-============================================================ */
-
-$("drawBtn").addEventListener(
-  "click",
-  () => {
-
-    show("draw");
-
-    setTimeout(
-      resizeDrawCanvas,
-      20
+    dialog(
+      "Tatort",
+      "Ein Passagier wurde in Kabine 214 tot aufgefunden. Untersuche die Umgebung und finde heraus, was passiert ist.",
+      "🔍 UNTERSUCHEN",
+      "investigate"
     );
-  }
-);
+
+  },500);
+
+  clearInterval(window.clock);
+
+  window.clock=setInterval(tick,1000);
+}
 
 
-$("garageBtn").addEventListener(
-  "click",
-  () => show("garage")
-);
+function show(id){
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(x=>x.classList.remove("active"));
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+}
 
 
-$("raceBtn").addEventListener(
-  "click",
-  () => {
+function tick(){
 
-    startRace();
+  if(!state.started) return;
 
-  }
-);
+  state.time++;
 
+  document.getElementById("time").textContent=fmt(state.time);
 
-$("drawBack").addEventListener(
-  "click",
-  () => show("menu")
-);
+}
 
 
-$("garageBack").addEventListener(
-  "click",
-  () => show("menu")
-);
+function fmt(t){
+
+  return String(Math.floor(t/60)).padStart(2,"0")
+       +":"
+       +String(t%60).padStart(2,"0");
+
+}
 
 
-$("clearDraw").addEventListener(
-  "click",
-  () => {
+function toast(text){
 
-    track = [];
+  const x=document.getElementById("toast");
 
-    drawTrack();
+  x.textContent=text;
 
-  }
-);
+  x.classList.add("show");
 
+  setTimeout(()=>{
+    x.classList.remove("show");
+  },2200);
 
-$("smoothDraw").addEventListener(
-  "click",
-  smoothTrack
-);
+}
 
 
-$("finishDraw").addEventListener(
-  "click",
-  () => {
+function clue(id){
 
-    if(track.length > 15){
+  if(!state.clues.includes(id)){
 
-      smoothTrack();
+    state.clues.push(id);
 
-      show("menu");
+    document.getElementById("clueCount").textContent=
+      state.clues.length;
 
-    }
-
-  }
-);
-
-
-$("useTrack").addEventListener(
-  "click",
-  () => {
-
-    if(track.length > 15){
-
-      smoothTrack();
-
-      startRace();
-
-    }
+    toast("🔎 Neuer Hinweis!");
 
   }
-);
+
+  state.flags[id]=true;
+
+}
 
 
-$("pauseBtn").addEventListener(
-  "click",
-  () => {
+function dialog(title,text,button,action){
 
-    raceState.paused =
-      !raceState.paused;
+  const d=document.getElementById("dialog");
 
-    $("pauseBtn").textContent =
-      raceState.paused
-      ? "▶"
-      : "II";
+  d.innerHTML=`
+
+    <h3>${title}</h3>
+
+    <div class="dialogText">
+      ${text}
+    </div>
+
+    <div class="choices">
+
+      <button class="choice"
+        onclick="${action}()">
+
+        ${button}
+
+      </button>
+
+    </div>
+  `;
+
+  d.classList.add("show");
+
+}
+
+
+function multiDialog(title,text,buttons){
+
+  const d=document.getElementById("dialog");
+
+  d.innerHTML=`
+
+    <h3>${title}</h3>
+
+    <div class="dialogText">
+      ${text}
+    </div>
+
+    <div class="choices">
+
+      ${buttons.map(b=>`
+
+        <button class="choice"
+          onclick="${b[1]}">
+
+          ${b[0]}
+
+        </button>
+
+      `).join("")}
+
+    </div>
+
+  `;
+
+  d.classList.add("show");
+
+}
+
+
+function closeDialog(){
+
+  document
+    .getElementById("dialog")
+    .classList.remove("show");
+
+}
+
+
+/* TATORT */
+
+function investigate(){
+
+  closeDialog();
+
+  if(state.room!=="Kabine"){
+
+    go("Kabine");
+
+    return;
+
   }
-);
 
 
-$("againBtn").addEventListener(
-  "click",
-  () => startRace()
-);
+  if(!state.flags.window){
 
+    dialog(
+      "Fenster",
+      "Das Fenster ist geschlossen. Am Rahmen hängt ein winziger blauer Faden.",
+      "🔎 FADEN UNTERSUCHEN",
+      "inspectWindow"
+    );
 
-$("resultMenuBtn").addEventListener(
-  "click",
-  () => show("menu")
-);
-
-
-/* ============================================================
-   KEYBOARD
-============================================================ */
-
-window.addEventListener(
-  "keydown",
-  e => {
-
-    if(e.key === "ArrowLeft")
-      leftPressed=true;
-
-    if(e.key === "ArrowRight")
-      rightPressed=true;
-
-    if(e.key === " ")
-      brakePressed=true;
-  }
-);
-
-
-window.addEventListener(
-  "keyup",
-  e => {
-
-    if(e.key === "ArrowLeft")
-      leftPressed=false;
-
-    if(e.key === "ArrowRight")
-      rightPressed=false;
-
-    if(e.key === " ")
-      brakePressed=false;
-  }
-);
-
-
-/* ============================================================
-   RESIZE
-============================================================ */
-
-window.addEventListener(
-  "resize",
-  () => {
-
-    if(screens.draw.classList.contains("active"))
-      resizeDrawCanvas();
-
-    resizeRace();
+    return;
 
   }
-);
 
 
-resizeRace();
+  if(!state.flags.clock){
+
+    dialog(
+      "Wanduhr",
+      "Die Wanduhr steht bei 22:41. Der Alarm wurde aber erst um 22:45 ausgelöst.",
+      "🔎 UHR ALS HINWEIS SICHERN",
+      "inspectClock"
+    );
+
+    return;
+
+  }
+
+
+  if(!state.flags.ticket){
+
+    dialog(
+      "Koffer",
+      "Im Koffer liegt ein altes Foto. Darauf steht: „Deck 7 – 22:30“.",
+      "🔎 FOTO UNTERSUCHEN",
+      "inspectTicket"
+    );
+
+    return;
+
+  }
+
+
+  dialog(
+    "Kabine",
+    "Du hast die wichtigsten Hinweise gefunden. Jetzt solltest du die Verdächtigen befragen.",
+    "👥 PERSONEN BEFRAGEN",
+    "talkMenu"
+  );
+
+}
+
+
+function inspectWindow(){
+
+  clue("window");
+
+  dialog(
+    "Hinweis",
+    "Der blaue Faden könnte von einer Jacke stammen.",
+    "WEITER",
+    "investigate"
+  );
+
+}
+
+
+function inspectClock(){
+
+  clue("clock");
+
+  dialog(
+    "Hinweis",
+    "Die Uhr blieb um 22:41 stehen – vier Minuten vor dem Alarm.",
+    "WEITER",
+    "investigate"
+  );
+
+}
+
+
+function inspectTicket(){
+
+  clue("ticket");
+
+  dialog(
+    "Hinweis",
+    "Das Foto beweist, dass sich jemand um 22:30 auf Deck 7 treffen sollte.",
+    "WEITER",
+    "investigate"
+  );
+
+}
+
+
+/* RÄUME */
+
+function renderRoom(){
+
+  const s=document.getElementById("scene");
+
+  let html=
+    `<div class="room">
+      <div class="wall"></div>
+      <div class="floor"></div>`;
+
+
+  if(state.room==="Kabine"){
+
+    html+=`
+
+      <div class="object door">
+        KABINE 214
+      </div>
+
+      <div class="object window">
+        🌧️<br>
+        FENSTER
+      </div>
+
+      <div class="object table">
+        TISCH
+      </div>
+
+      <div class="object bed">
+        🛏️
+      </div>
+
+      <button class="interact"
+        style="left:10%;top:43%"
+        onclick="inspectWindow()">
+
+        🔎 Fenster
+
+      </button>
+
+      <button class="interact"
+        style="left:43%;bottom:41%"
+        onclick="investigate()">
+
+        🔎 Untersuchen
+
+      </button>
+
+      <button class="interact"
+        style="right:8%;bottom:36%"
+        onclick="inspectTicket()">
+
+        🔎 Koffer
+
+      </button>
+
+    `;
+
+  }
+
+
+  else if(state.room==="Deck 7"){
+
+    html+=`
+
+      <div class="object"
+        style="left:0;right:0;top:16%;height:15%;background:#172a35">
+
+        🌊 STURM • OZEAN
+
+      </div>
+
+      <div class="object"
+        style="left:10%;bottom:24%;width:80%;height:13%">
+
+        🛟 RETTUNGSBOOTE
+
+      </div>
+
+      <div class="object"
+        style="left:38%;bottom:48%;width:24%;height:16%">
+
+        TÜR
+
+      </div>
+
+    `;
+
+  }
+
+
+  else if(state.room==="Lounge"){
+
+    html+=`
+
+      <div class="object"
+        style="left:10%;bottom:23%;width:34%;height:18%">
+
+        🛋️ SOFA
+
+      </div>
+
+      <div class="object"
+        style="right:10%;bottom:23%;width:25%;height:20%">
+
+        🍽️ BAR
+
+      </div>
+
+      <div class="object"
+        style="left:40%;top:20%;width:20%;height:16%">
+
+        🌊 MEER
+
+      </div>
+
+    `;
+
+  }
+
+
+  else if(state.room==="Fitnessraum"){
+
+    html+=`
+
+      <div class="object"
+        style="left:10%;bottom:23%;width:25%;height:25%">
+
+        🏋️ GEWICHTE
+
+      </div>
+
+      <div class="object"
+        style="left:42%;bottom:23%;width:25%;height:18%">
+
+        🚴 TRAINER
+
+      </div>
+
+      <div class="object"
+        style="right:8%;bottom:23%;width:18%;height:28%">
+
+        🪞 SPIEGEL
+
+      </div>
+
+    `;
+
+  }
+
+
+  else if(state.room==="Brücke"){
+
+    html+=`
+
+      <div class="object"
+        style="left:8%;top:17%;width:84%;height:24%">
+
+        🖥️ STEUERUNG<br>
+        🌊🌊🌊
+
+      </div>
+
+      <div class="object"
+        style="left:35%;bottom:24%;width:30%;height:25%">
+
+        🧭 BRÜCKE
+
+      </div>
+
+    `;
+
+  }
+
+
+  html+=`</div>`;
+
+  s.innerHTML=html;
+
+}
+
+
+function go(room){
+
+  state.room=room;
+
+  renderRoom();
+
+  toast("📍 "+room);
+
+}
+
+
+/* KARTE */
+
+function openMap(){
+
+  const o=document.getElementById("overlay");
+
+  o.innerHTML=`
+
+    <div class="panel">
+
+      <button class="close"
+        onclick="closeOverlay()">
+
+        ✕
+
+      </button>
+
+      <h2>🗺️ Schiffskarte</h2>
+
+      <p>Wähle einen Ort:</p>
+
+      <div id="mapList">
+
+        ${Object.keys(rooms).map(x=>`
+
+          <button class="roomBtn"
+            onclick="go('${x}');closeOverlay()">
+
+            📍 ${x}
+
+          </button>
+
+        `).join("")}
+
+      </div>
+
+    </div>
+
+  `;
+
+  o.classList.add("show");
+
+}
+
+
+/* HINWEISE */
+
+function openClues(){
+
+  let text="";
+
+  if(state.clues.length===0){
+
+    text=`
+      <div class="clue">
+        Noch keine Hinweise gefunden.
+      </div>
+    `;
+
+  }else{
+
+    const names={
+      window:"Blauer Faden am Fenster",
+      clock:"Uhr stoppte bei 22:41",
+      ticket:"Foto: Treffen auf Deck 7 um 22:30"
+    };
+
+    text=state.clues
+      .map(id=>`
+        <div class="clue">
+          🔎 ${names[id]}
+        </div>
+      `)
+      .join("");
+
+  }
+
+
+  const o=document.getElementById("overlay");
+
+  o.innerHTML=`
+
+    <div class="panel">
+
+      <button class="close"
+        onclick="closeOverlay()">
+
+        ✕
+
+      </button>
+
+      <h2>🔎 Deine Hinweise</h2>
+
+      ${text}
+
+    </div>
+
+  `;
+
+  o.classList.add("show");
+
+}
+
+
+/* PERSONEN */
+
+function talkMenu(){
+
+  closeOverlay();
+
+  const o=document.getElementById("overlay");
+
+  o.innerHTML=`
+
+    <div class="panel">
+
+      <button class="close"
+        onclick="closeOverlay()">
+
+        ✕
+
+      </button>
+
+      <h2>👥 Verdächtige</h2>
+
+      <button class="roomBtn"
+        onclick="question('captain')">
+
+        👨‍✈️ Kapitän Weber
+
+      </button>
+
+      <br><br>
+
+      <button class="roomBtn"
+        onclick="question('sofia')">
+
+        👩 Sofia
+
+      </button>
+
+      <br><br>
+
+      <button class="roomBtn"
+        onclick="question('leon')">
+
+        👨 Leon
+
+      </button>
+
+      <br><br>
+
+      <button class="roomBtn"
+        onclick="question('marco')">
+
+        🧑 Marco
+
+      </button>
+
+    </div>
+
+  `;
+
+  o.classList.add("show");
+
+}
+
+
+function question(who){
+
+  closeOverlay();
+
+
+  if(who==="captain"){
+
+    multiDialog(
+      "Kapitän Weber",
+      "„Um 22:45 habe ich den Alarm ausgelöst. Vorher war ich auf der Brücke.“",
+      [
+        ["🔎 Nach der Tür fragen","askCaptainDoor()"],
+        ["↩️ Zurück","talkMenu()"]
+      ]
+    );
+
+  }
+
+
+  if(who==="sofia"){
+
+    multiDialog(
+      "Sofia",
+      "„Ich war gegen 22:30 in der Lounge. Danach bin ich kurz auf Deck 7 gegangen.“",
+      [
+        ["🔎 Jacke fragen","askSofiaJacket()"],
+        ["↩️ Zurück","talkMenu()"]
+      ]
+    );
+
+  }
+
+
+  if(who==="leon"){
+
+    multiDialog(
+      "Leon",
+      "„Ich war im Fitnessraum und bin danach in meine Kabine gegangen.“",
+      [
+        ["🔎 Kleidung fragen","askLeonClothes()"],
+        ["↩️ Zurück","talkMenu()"]
+      ]
+    );
+
+  }
+
+
+  if(who==="marco"){
+
+    multiDialog(
+      "Marco",
+      "„Ich war auf Deck 7. Aber ich habe dort niemanden getroffen.“ Er wirkt nervös.",
+      [
+        ["🔎 Treffen erwähnen","askMarcoMeeting()"],
+        ["↩️ Zurück","talkMenu()"]
+      ]
+    );
+
+  }
+
+}
+
+
+/* BEFRAGUNG */
+
+function askCaptainDoor(){
+
+  clue("door");
+
+  dialog(
+    "Kapitän Weber",
+    "„Das Zugangssystem zeichnet jede Tür auf. Die Kabine wurde um 22:38 geöffnet.“",
+    "WEITER",
+    "talkMenu"
+  );
+
+}
+
+
+function askSofiaJacket(){
+
+  clue("bluejacket");
+
+  dialog(
+    "Sofia",
+    "„Ja, meine Jacke ist blau. Aber daraus kannst du nichts schließen.“",
+    "WEITER",
+    "talkMenu"
+  );
+
+}
+
+
+function askLeonClothes(){
+
+  clue("dryclothes");
+
+  dialog(
+    "Leon",
+    "„Meine Kleidung ist trocken. Ich war die ganze Zeit drinnen.“",
+    "WEITER",
+    "talkMenu"
+  );
+
+}
+
+
+function askMarcoMeeting(){
+
+  clue("marco");
+
+  dialog(
+    "Marco",
+    "„Ich war dort, aber ich habe niemanden getroffen.“ Seine Aussage passt nicht ganz zum Foto.",
+    "WEITER",
+    "talkMenu"
+  );
+
+}
+
+
+/* ANKLAGE */
+
+function accusation(){
+
+  const o=document.getElementById("overlay");
+
+  o.innerHTML=`
+
+    <div class="panel">
+
+      <button class="close"
+        onclick="closeOverlay()">
+
+        ✕
+
+      </button>
+
+      <h2>⚖️ WEN BESCHULDIGST DU?</h2>
+
+      <p>
+        Du darfst nur eine Person beschuldigen.
+      </p>
+
+      <div class="accuse">
+
+        <button onclick="ending('captain')">
+          👨‍✈️ Weber
+        </button>
+
+        <button onclick="ending('sofia')">
+          👩 Sofia
+        </button>
+
+        <button onclick="ending('leon')">
+          👨 Leon
+        </button>
+
+        <button onclick="ending('marco')">
+          🧑 Marco
+        </button>
+
+      </div>
+
+    </div>
+
+  `;
+
+  o.classList.add("show");
+
+}
+
+
+/* ENDE */
+
+function ending(who){
+
+  closeOverlay();
+
+  let correct=who==="marco";
+
+  if(correct){
+
+    dialog(
+      "🎉 FALL GELÖST!",
+      "Marco war der Täter. Die Hinweise auf Deck 7, der Zeitablauf und seine widersprüchliche Aussage haben ihn verraten.",
+      "🔄 NOCHMAL SPIELEN",
+      "startGame"
+    );
+
+  }else{
+
+    dialog(
+      "❌ FALSCHE ANKLAGE",
+      "Deine Anklage passt nicht zu allen Hinweisen. Der wahre Täter konnte entkommen.",
+      "🔄 NOCHMAL SPIELEN",
+      "startGame"
+    );
+
+  }
+
+}
+
+
+/* ANLEITUNG */
+
+function showHow(){
+
+  alert(
+    "Du bist der Ermittler! 🔎\n\n"+
+    "1. Untersuche die Kabine.\n"+
+    "2. Sammle Hinweise.\n"+
+    "3. Erkunde das Schiff.\n"+
+    "4. Befrage die Verdächtigen.\n"+
+    "5. Vergleiche ihre Aussagen.\n"+
+    "6. Beschuldige am Ende den Täter."
+  );
+
+}
+
+
+function closeOverlay(){
+
+  document
+    .getElementById("overlay")
+    .classList.remove("show");
+
+}
 
 </script>
 
