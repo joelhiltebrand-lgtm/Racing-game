@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>TrackForge Racing</title>
-
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#080c10;color:#fff;font-family:Arial,Helvetica,sans-serif}
@@ -20,567 +19,91 @@ button:active{transform:scale(.97)}
 .menuBtn{min-height:75px;font-size:18px}
 .primary{background:#ffad1f;color:#111}
 .back{margin-bottom:15px}
-
 .carGrid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
 .carCard{background:#151e25;border:2px solid #26343e;border-radius:18px;padding:14px}
 .carCard.selected{border-color:#ffad1f}
 .carPreview{height:65px;border-radius:12px;margin-bottom:10px;position:relative}
-.carPreview:after{
-content:"";position:absolute;left:18%;right:18%;top:38%;height:24%;
-background:#111;border-radius:10px
-}
+.carPreview:after{content:"";position:absolute;left:18%;right:18%;top:38%;height:24%;background:#111;border-radius:10px}
 .stat{height:7px;background:#26323b;border-radius:10px;margin:6px 0 10px;overflow:hidden}
 .stat i{display:block;height:100%;background:#ffad1f;border-radius:10px}
 
-/* =========================
-   APEX DRAW STYLE BUILDER
-========================= */
-
-#drawScreen{
-padding:0!important;
-overflow:hidden;
-background:#0a0d10
-}
-
-.apexBoard{
-position:absolute;
-inset:0;
-background:#11161a
-}
-
-#drawCanvas{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-min-height:0;
-border:0;
-border-radius:0;
-touch-action:none;
-display:block;
-background-color:#11161a;
-background-image:
-linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),
-linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
-background-size:32px 32px
-}
-
-.drawOverlay{
-position:absolute;
-inset:0;
-pointer-events:none
-}
-
-.drawNav{
-position:absolute;
-top:max(14px,env(safe-area-inset-top));
-left:16px;
-right:16px;
-display:flex;
-align-items:center;
-justify-content:space-between;
-pointer-events:auto
-}
-
-.glassBtn{
-width:48px;
-height:48px;
-padding:0;
-border-radius:14px;
-background:rgba(12,17,20,.86);
-border:1px solid rgba(255,255,255,.14);
-font-size:24px
-}
-
-.boardTitle{
-font-size:15px;
-font-weight:900;
-letter-spacing:2px;
-background:rgba(12,17,20,.78);
-padding:12px 17px;
-border-radius:14px;
-border:1px solid rgba(255,255,255,.1)
-}
-
-.boardTitle span{
-color:#ffad1f;
-margin-left:7px
-}
-
-.modePill{
-position:absolute;
-top:82px;
-left:50%;
-transform:translateX(-50%);
-background:rgba(12,17,20,.9);
-border:1px solid rgba(255,255,255,.12);
-border-radius:13px;
-padding:4px;
-display:flex;
-pointer-events:auto
-}
-
-.mode{
-background:transparent;
-padding:9px 15px;
-font-size:12px;
-border-radius:9px;
-color:#88949b
-}
-
-.mode.active{
-background:#f1f3f3;
-color:#111820
-}
-
-.drawHint{
-position:absolute;
-top:130px;
-left:50%;
-transform:translateX(-50%);
-white-space:nowrap;
-color:#b8c1c5;
-background:rgba(9,13,16,.68);
-padding:8px 13px;
-border-radius:12px;
-font-size:12px;
-pointer-events:none
-}
-
-.drawBottom{
-position:absolute;
-left:14px;
-right:14px;
-bottom:max(14px,env(safe-area-inset-bottom));
-background:rgba(10,14,17,.94);
-border:1px solid rgba(255,255,255,.12);
-border-radius:20px;
-padding:12px;
-pointer-events:auto;
-box-shadow:0 12px 35px rgba(0,0,0,.35)
-}
-
-.drawToolbar{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px
-}
-
-.toolStat{
-background:#151c20;
-border-radius:13px;
-padding:9px 10px
-}
-
-.toolStat span{
-display:block;
-color:#75828a;
-font-size:9px;
-font-weight:800;
-letter-spacing:1px
-}
-
-.toolStat b{
-display:block;
-font-size:14px;
-margin:3px 0 5px
-}
-
-.toolStat input{
-width:100%;
-accent-color:#ffad1f
-}
-
-.drawActions{
-display:flex;
-gap:10px;
-margin-top:10px
-}
-
-.drawActions button{
-flex:1;
-height:50px
-}
-
-.secondary{
-background:#20292e;
-border:1px solid #36434a
-}
-
-.apexDrive{
-font-size:16px
-}
-
-#stabilizePanel{
-display:none;
-position:absolute;
-left:50%;
-bottom:50%;
-transform:translate(-50%,50%);
-width:min(430px,calc(100% - 30px));
-background:rgba(8,12,15,.96);
-border:1px solid rgba(255,255,255,.14);
-border-radius:18px;
-padding:18px;
-z-index:20;
-text-align:center
-}
-
-.progress{
-height:8px;
-background:#252e33;
-border-radius:99px;
-overflow:hidden;
-margin-top:12px
-}
-
-.progress i{
-display:block;
-width:0;
-height:100%;
-background:#ffad1f
-}
-
-/* =========================
-   RACE SCREEN
-========================= */
-
-#gameScreen{
-padding:0;
-overflow:hidden;
-background:#86aeba;
-position:fixed;
-inset:0
-}
-
-#gameCanvas{
-position:absolute;
-inset:0;
-width:100%;
-height:100%;
-touch-action:none;
-display:block
-}
-
-#raceHud{
-position:absolute;
-inset:0;
-pointer-events:none;
-z-index:10
-}
-
-#timingBox{
-position:absolute;
-top:max(28px,env(safe-area-inset-top));
-left:8.95%;
-width:282px;
-height:160px;
-background:rgba(16,23,28,.92);
-border-left:4px solid #ffad1f
-}
-
-.timingRow{
-height:48px;
-display:flex;
-align-items:center;
-border-bottom:1px solid #667178;
-padding:0 15px
-}
-
-.timingRow:last-child{
-border-bottom:0
-}
-
-.timingLabel{
-color:#77848b;
-font-size:13px;
-letter-spacing:2px;
-width:75px
-}
-
-.timingValue{
-font-family:monospace;
-font-size:29px;
-font-weight:900;
-color:#ffad1f
-}
-
-.timingLast{
-font-size:22px;
-color:#e7e9ea;
-margin-left:auto
-}
-
-.timingBest{
-font-size:22px;
-color:#b36cff;
-margin-left:auto
-}
-
-.sectors{
-position:absolute;
-left:8.95%;
-top:196px;
-width:282px;
-height:64px;
-display:grid;
-grid-template-columns:repeat(3,1fr);
-background:rgba(15,22,27,.9)
-}
-
-.sector{
-padding:9px;
-border-right:1px solid #59656d
-}
-
-.sector:last-child{
-border-right:0
-}
-
-.sectorTitle{
-color:#718089;
-font-size:12px;
-letter-spacing:2px
-}
-
-.sectorTime{
-color:#d7dcde;
-font-family:monospace;
-font-size:16px;
-margin-top:5px
-}
-
-#pauseBtn{
-position:absolute;
-top:19px;
-left:50%;
-transform:translateX(-50%);
-width:109px;
-height:70px;
-padding:0;
-background:rgba(50,72,83,.86);
-border:2px solid rgba(130,150,158,.48);
-border-radius:16px;
-font-size:28px;
-color:#dce3e6;
-pointer-events:auto
-}
-
-#speedPanel{
-position:absolute;
-right:8.7%;
-top:39px;
-text-align:right
-}
-
-#speedValue{
-font-size:68px;
-line-height:.82;
-font-weight:900;
-color:#eef1f2
-}
-
-#speedUnit{
-color:#7c8b91;
-font-size:17px;
-letter-spacing:4px;
-margin-top:7px
-}
-
-#minimap{
-position:absolute;
-right:8.5%;
-top:151px;
-width:180px;
-height:180px;
-background:rgba(20,29,34,.9);
-border:0
-}
-
-#banner{
-position:absolute;
-left:50%;
-top:42%;
-transform:translate(-50%,-50%);
-font-size:55px;
-font-weight:900;
-text-shadow:0 4px 20px #000;
-z-index:30;
-pointer-events:none
-}
-
-#sideControls{
-position:absolute;
-left:24px;
-top:121px;
-bottom:244px;
-display:flex;
-flex-direction:column;
-gap:14px;
-z-index:20
-}
-
-.sideButton{
-width:65px;
-height:108px;
-border-radius:32px;
-background:#020304;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:25px;
-border:1px solid rgba(255,255,255,.08)
-}
-
-.sideButton.long{
-height:220px
-}
-
-#touchControls{
-position:absolute;
-left:0;
-right:0;
-bottom:62px;
-height:180px;
-pointer-events:none;
-z-index:20
-}
-
-.touchBtn{
-position:absolute;
-width:176px;
-height:176px;
-border-radius:50%;
-background:rgba(25,35,40,.82);
-border:2px solid rgba(160,177,184,.38);
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:34px;
-user-select:none;
-pointer-events:auto;
-color:#e8edef;
-touch-action:none
-}
-
-#leftBtn{
-left:8.5%;
-bottom:0
-}
-
-#rightBtn{
-left:21.1%;
-bottom:0
-}
-
-#brakeBtn{
-right:21.1%;
-bottom:0
-}
-
-#gasBtn{
-right:8.5%;
-bottom:0
-}
-
-.touchText{
-font-size:27px;
-letter-spacing:1px;
-font-weight:500
-}
-
-#resultScreen{
-text-align:center
-}
-
-.resultPos{
-font-size:80px;
-font-weight:900;
-color:#ffad1f
-}
-
-@media(max-width:1100px){
-
-#timingBox{left:24px}
-.sectors{left:24px}
-#speedPanel{right:24px}
-#minimap{right:24px}
-
-.touchBtn{
-width:145px;
-height:145px
-}
-
-#touchControls{
-bottom:32px
-}
-
-.touchText{
-font-size:23px
-}
-
-}
-
-@media(max-width:700px){
-
-#timingBox{
-left:12px;
-transform:scale(.72);
-transform-origin:top left
-}
-
-.sectors{
-left:12px;
-top:158px;
-transform:scale(.72);
-transform-origin:top left
-}
-
-#speedPanel{
-right:14px;
-top:31px
-}
-
-#speedValue{
-font-size:52px
-}
-
-#minimap{
-right:14px;
-top:119px;
-width:145px;
-height:145px
-}
-
-.sideButton{
-width:58px
-}
-
-.sideButton.long{
-height:170px
-}
-
-.touchBtn{
-width:112px;
-height:112px
-}
-
-.touchText{
-font-size:19px
-}
-
-#touchControls{
-bottom:18px
-}
-
-.drawToolbar{
-gap:6px
-}
-
-.toolStat{
-padding:8px 7px
-}
-
+/* DRAW */
+#drawScreen{padding:0!important;overflow:hidden;background:#0a0d10}
+.apexBoard{position:absolute;inset:0;background:#11161a}
+#drawCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none;display:block;background:#11161a;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:32px 32px}
+.drawOverlay{position:absolute;inset:0;pointer-events:none}
+.drawNav{position:absolute;top:max(14px,env(safe-area-inset-top));left:16px;right:16px;display:flex;align-items:center;justify-content:space-between;pointer-events:auto}
+.glassBtn{width:48px;height:48px;padding:0;border-radius:14px;background:rgba(12,17,20,.86);border:1px solid rgba(255,255,255,.14);font-size:24px}
+.boardTitle{font-size:15px;font-weight:900;letter-spacing:2px;background:rgba(12,17,20,.78);padding:12px 17px;border-radius:14px}
+.boardTitle span{color:#ffad1f;margin-left:7px}
+.modePill{position:absolute;top:82px;left:50%;transform:translateX(-50%);background:rgba(12,17,20,.9);border-radius:13px;padding:4px;display:flex;pointer-events:auto}
+.mode{background:transparent;padding:9px 15px;font-size:12px;border-radius:9px;color:#88949b}
+.mode.active{background:#f1f3f3;color:#111820}
+.drawHint{position:absolute;top:130px;left:50%;transform:translateX(-50%);white-space:nowrap;color:#b8c1c5;background:rgba(9,13,16,.68);padding:8px 13px;border-radius:12px;font-size:12px}
+.drawBottom{position:absolute;left:14px;right:14px;bottom:max(14px,env(safe-area-inset-bottom));background:rgba(10,14,17,.94);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:12px;pointer-events:auto}
+.drawToolbar{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.toolStat{background:#151c20;border-radius:13px;padding:9px 10px}
+.toolStat span{display:block;color:#75828a;font-size:9px;font-weight:800}
+.toolStat b{display:block;font-size:14px;margin:3px 0 5px}
+.toolStat input{width:100%;accent-color:#ffad1f}
+.drawActions{display:flex;gap:10px;margin-top:10px}
+.drawActions button{flex:1;height:50px}
+.secondary{background:#20292e}
+#stabilizePanel{display:none;position:absolute;left:50%;bottom:50%;transform:translate(-50%,50%);width:min(430px,calc(100% - 30px));background:rgba(8,12,15,.96);border:1px solid #394852;border-radius:18px;padding:18px;z-index:20;text-align:center}
+.progress{height:8px;background:#252e33;border-radius:99px;overflow:hidden;margin-top:12px}
+.progress i{display:block;width:0;height:100%;background:#ffad1f}
+
+/* RACE */
+#gameScreen{padding:0;overflow:hidden;background:#86aeba;position:fixed;inset:0}
+#gameCanvas{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+#raceHud{position:absolute;inset:0;pointer-events:none;z-index:10}
+#timingBox{position:absolute;top:max(28px,env(safe-area-inset-top));left:8.95%;width:282px;background:rgba(16,23,28,.92);border-left:4px solid #ffad1f}
+.timingRow{height:48px;display:flex;align-items:center;border-bottom:1px solid #667178;padding:0 15px}
+.timingLabel{color:#77848b;font-size:13px;letter-spacing:2px;width:75px}
+.timingValue{font-family:monospace;font-size:29px;font-weight:900;color:#ffad1f}
+.timingLast{font-size:22px;margin-left:auto}
+.timingBest{font-size:22px;color:#b36cff;margin-left:auto}
+.sectors{position:absolute;left:8.95%;top:196px;width:282px;display:grid;grid-template-columns:repeat(3,1fr);background:rgba(15,22,27,.9)}
+.sector{padding:9px;border-right:1px solid #59656d}
+.sectorTitle{color:#718089;font-size:12px}
+.sectorTime{font-family:monospace;margin-top:5px}
+#pauseBtn{position:absolute;top:19px;left:50%;transform:translateX(-50%);width:109px;height:70px;background:rgba(50,72,83,.86);border:2px solid #78909b;border-radius:16px;font-size:28px;pointer-events:auto}
+#speedPanel{position:absolute;right:8.7%;top:39px;text-align:right}
+#speedValue{font-size:68px;font-weight:900}
+#speedUnit{color:#7c8b91;font-size:17px;letter-spacing:4px}
+#minimap{position:absolute;right:8.5%;top:151px;width:180px;height:180px;background:#141d22}
+#banner{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);font-size:55px;font-weight:900;text-shadow:0 4px 20px #000}
+#sideControls{position:absolute;left:24px;top:121px;bottom:244px;display:flex;flex-direction:column;gap:14px}
+.sideButton{width:65px;height:108px;border-radius:32px;background:#020304;display:flex;align-items:center;justify-content:center;font-size:25px}
+.sideButton.long{height:220px}
+#touchControls{position:absolute;left:0;right:0;bottom:62px;height:180px;pointer-events:none}
+.touchBtn{position:absolute;width:176px;height:176px;border-radius:50%;background:rgba(25,35,40,.82);border:2px solid rgba(160,177,184,.38);display:flex;align-items:center;justify-content:center;font-size:34px;pointer-events:auto;touch-action:none}
+#leftBtn{left:8.5%;bottom:0}
+#rightBtn{left:21.1%;bottom:0}
+#brakeBtn{right:21.1%;bottom:0}
+#gasBtn{right:8.5%;bottom:0}
+.touchText{font-size:27px}
+.resultPos{font-size:80px;font-weight:900;color:#ffad1f}
+#resultScreen{text-align:center}
+
+@media(max-width:900px){
+.touchBtn{width:130px;height:130px}
+#timingBox{left:15px}
+.sectors{left:15px}
+#speedPanel{right:15px}
+#minimap{right:15px;width:145px;height:145px}
+}
+@media(max-width:600px){
+.title{font-size:29px}
+.grid{grid-template-columns:1fr}
+.touchBtn{width:105px;height:105px}
+.touchText{font-size:18px}
+#timingBox{transform:scale(.72);transform-origin:top left}
+.sectors{top:155px;transform:scale(.72);transform-origin:top left}
+#speedValue{font-size:50px}
+#minimap{top:120px}
+.drawToolbar{gap:5px}
+.toolStat{padding:7px}
 }
 </style>
 </head>
@@ -588,97 +111,43 @@ padding:8px 7px
 <body>
 
 <section id="homeScreen" class="screen active">
-
 <div class="title">🏁 TrackForge Racing</div>
-
-<div class="subtitle">
-Zeichne deine eigene Rennstrecke und fahre darauf.
-</div>
-
+<div class="subtitle">Zeichne deine eigene Rennstrecke und fahre darauf.</div>
 <div class="grid">
-
-<button class="menuBtn primary" onclick="openDraw()">
-🖊️ Strecke zeichnen
-</button>
-
-<button class="menuBtn" onclick="openGarage()">
-🚗 Garage
-</button>
-
-<button class="menuBtn" onclick="showTracks()">
-🏁 Meine Strecken
-</button>
-
-<button class="menuBtn" onclick="openWeekend()">
-🏆 Rennwochenende
-</button>
-
+<button class="menuBtn primary" onclick="openDraw()">🖊️ Strecke zeichnen</button>
+<button class="menuBtn" onclick="openGarage()">🚗 Garage</button>
+<button class="menuBtn" onclick="showTracks()">🏁 Meine Strecken</button>
+<button class="menuBtn" onclick="openWeekend()">🏆 Rennwochenende</button>
 </div>
-
-<div class="card">
-<b>Aktuelle Strecke</b>
-<div id="homeTrackInfo" class="small" style="margin-top:8px">
-Noch keine Strecke erstellt.
-</div>
-</div>
-
+<div class="card"><b>Aktuelle Strecke</b><div id="homeTrackInfo" class="small">Noch keine Strecke erstellt.</div></div>
 </section>
 
 <section id="garageScreen" class="screen">
-
-<button class="back" onclick="showScreen('homeScreen')">
-← Zurück
-</button>
-
+<button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
 <div class="title">🚗 Garage</div>
-
-<div class="subtitle">
-Wähle dein Auto.
-</div>
-
+<div class="subtitle">Wähle dein Auto.</div>
 <div id="carGrid" class="carGrid"></div>
-
 </section>
 
 <section id="drawScreen" class="screen">
-
 <div class="apexBoard">
-
 <canvas id="drawCanvas"></canvas>
 
 <div class="drawOverlay">
 
 <div class="drawNav">
-
-<button class="glassBtn" onclick="showScreen('homeScreen')">
-×
-</button>
-
-<div class="boardTitle">
-TRACKFORGE
-<span>DRAW</span>
-</div>
-
-<button class="glassBtn" onclick="clearDrawing()">
-↻
-</button>
-
+<button class="glassBtn" onclick="showScreen('homeScreen')">←</button>
+<div class="boardTitle">TRACK BUILDER <span>FREEHAND</span></div>
+<button class="glassBtn" onclick="clearDrawing()">↻</button>
 </div>
 
 <div class="modePill">
-
-<button id="freeMode" class="mode active" onclick="setDrawMode('free')">
-FREEHAND
-</button>
-
-<button id="dotMode" class="mode" onclick="setDrawMode('dots')">
-DOTS
-</button>
-
+<button id="freeMode" class="mode active" onclick="setDrawMode('freehand',this)">FREEHAND</button>
+<button id="dotMode" class="mode" onclick="setDrawMode('dots',this)">DOTS</button>
 </div>
 
-<div class="drawHint">
-Zeichne deine Rennlinie – komm am Ende wieder zum Start zurück.
+<div id="drawHint" class="drawHint">
+Draw a closed loop. The start becomes the start line.
 </div>
 
 <div class="drawBottom">
@@ -686,111 +155,60 @@ Zeichne deine Rennlinie – komm am Ende wieder zum Start zurück.
 <div class="drawToolbar">
 
 <div class="toolStat">
-<span>ROAD WIDTH</span>
-<b id="roadWidthLabel">NORMAL</b>
-<input id="roadWidth" type="range" min="0" max="2" value="1" oninput="updateBuilderSetting()">
+<span>TRACK WIDTH</span>
+<b id="widthValue">12 m</b>
+<input id="widthSlider" type="range" min="7" max="20" value="12">
 </div>
 
 <div class="toolStat">
 <span>HILLS</span>
-<b id="hillsLabel">ROLLING</b>
-<input id="hills" type="range" min="0" max="2" value="1" oninput="updateBuilderSetting()">
+<b id="hillValue">Rolling</b>
+<input id="hillSlider" type="range" min="0" max="2" value="1">
 </div>
 
 <div class="toolStat">
 <span>SMOOTHING</span>
-<b id="smoothLabel">NORMAL</b>
-<input id="smooth" type="range" min="0" max="2" value="1" oninput="updateBuilderSetting()">
+<b id="smoothValue">Normal</b>
+<input id="smoothSlider" type="range" min="0" max="2" value="1">
 </div>
 
 </div>
 
 <div class="drawActions">
-
-<button class="secondary" onclick="clearDrawing()">
-LÖSCHEN
-</button>
-
-<button class="primary apexDrive" onclick="finishDrawing()">
-DRIVE IT →
-</button>
-
-</div>
-
-</div>
-
+<button class="secondary" onclick="clearDrawing()">CLEAR</button>
+<button class="primary" onclick="finishDrawing()">DRIVE IT →</button>
 </div>
 
 </div>
 
 <div id="stabilizePanel">
-
-<b id="stabilizeText">
-BUILDING TRACK...
-</b>
-
-<div class="progress">
-<i id="stabilizeBar"></i>
-</div>
-
-<div id="lengthResult" class="lengthBox">
-Streckenlänge: —
+<b id="stabilizeText">BUILDING 3D TRACK...</b>
+<div class="progress"><i id="stabilizeBar"></i></div>
+<div id="lengthResult">Track length: —</div>
 </div>
 
 </div>
-
+</div>
 </section>
 
 <section id="tracksScreen" class="screen">
-
-<button class="back" onclick="showScreen('homeScreen')">
-← Zurück
-</button>
-
-<div class="title">
-🏁 Meine Strecken
-</div>
-
+<button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
+<div class="title">🏁 Meine Strecken</div>
 <div id="tracksList"></div>
-
 </section>
 
 <section id="weekendScreen" class="screen">
-
-<button class="back" onclick="showScreen('homeScreen')">
-← Zurück
-</button>
-
-<div class="title">
-🏆 Rennwochenende
-</div>
-
+<button class="back" onclick="showScreen('homeScreen')">← Zurück</button>
+<div class="title">🏆 Rennwochenende</div>
 <div class="card">
-
-<b id="weekendTrack">
-Keine Strecke
-</b>
-
-<div class="small" id="weekendLength"></div>
-
+<b id="weekendTrack">Keine Strecke</b>
+<div id="weekendLength" class="small"></div>
 </div>
-
 <div class="grid">
-
-<button class="menuBtn primary" onclick="startSession('training')">
-🟢 Training
-</button>
-
-<button class="menuBtn" onclick="startSession('qualifying')">
-🟡 Qualifying
-</button>
-
-<button class="menuBtn" onclick="startSession('race')">
-🔴 Rennen
-</button>
-
+<button class="menuBtn primary" onclick="startSession('training')">🟢 Training</button>
+<button class="menuBtn" onclick="startSession('qualifying')">🟡 Qualifying</button>
+<button class="menuBtn" onclick="startSession('race')">🔴 Rennen</button>
 </div>
-
 </section>
 
 <section id="gameScreen" class="screen">
@@ -800,76 +218,38 @@ Keine Strecke
 <div id="raceHud">
 
 <div id="timingBox">
-
 <div class="timingRow">
-<span class="timingLabel">
-LAP <span id="lapNumber">1</span>
-</span>
-<span id="currentTime" class="timingValue">
-0:00.000
-</span>
+<span class="timingLabel">LAP <span id="lapNumber">1</span></span>
+<span id="currentTime" class="timingValue">0:00.000</span>
 </div>
-
 <div class="timingRow">
-<span class="timingLabel">
-LAST
-</span>
-<span id="lastTime" class="timingLast">
-—:—.———
-</span>
+<span class="timingLabel">LAST</span>
+<span id="lastTime" class="timingLast">—:—.———</span>
 </div>
-
 <div class="timingRow">
-<span class="timingLabel">
-BEST
-</span>
-<span id="bestTime" class="timingBest">
-—:—.———
-</span>
+<span class="timingLabel">BEST</span>
+<span id="bestTime" class="timingBest">—:—.———</span>
 </div>
-
 </div>
 
 <div class="sectors">
-
-<div class="sector">
-<div class="sectorTitle">S1</div>
-<div id="s1" class="sectorTime">—.——</div>
-</div>
-
-<div class="sector">
-<div class="sectorTitle">S2</div>
-<div id="s2" class="sectorTime">—.——</div>
-</div>
-
-<div class="sector">
-<div class="sectorTitle">S3</div>
-<div id="s3" class="sectorTime">—.——</div>
-</div>
-
+<div class="sector"><div class="sectorTitle">S1</div><div id="s1" class="sectorTime">—.——</div></div>
+<div class="sector"><div class="sectorTitle">S2</div><div id="s2" class="sectorTime">—.——</div></div>
+<div class="sector"><div class="sectorTitle">S3</div><div id="s3" class="sectorTime">—.——</div></div>
 </div>
 
 <div id="speedPanel">
-
 <div id="speedValue">0</div>
 <div id="speedUnit">KM/H</div>
-
 </div>
 
-<button id="pauseBtn" onclick="togglePause()">
-☰
-</button>
+<button id="pauseBtn" onclick="togglePause()">☰</button>
 
 <canvas id="minimap"></canvas>
 
 <div id="sideControls">
-
-<div class="sideButton">
-🔊
-</div>
-
+<div class="sideButton">🔊</div>
 <div class="sideButton long"></div>
-
 </div>
 
 </div>
@@ -877,51 +257,22 @@ BEST
 <div id="banner"></div>
 
 <div id="touchControls">
-
-<div class="touchBtn" id="leftBtn">
-◀
-</div>
-
-<div class="touchBtn" id="rightBtn">
-▶
-</div>
-
-<div class="touchBtn" id="brakeBtn">
-<span class="touchText">BRAKE</span>
-</div>
-
-<div class="touchBtn" id="gasBtn">
-<span class="touchText">GAS</span>
-</div>
-
+<div class="touchBtn" id="leftBtn">◀</div>
+<div class="touchBtn" id="rightBtn">▶</div>
+<div class="touchBtn" id="brakeBtn"><span class="touchText">BRAKE</span></div>
+<div class="touchBtn" id="gasBtn"><span class="touchText">GAS</span></div>
 </div>
 
 </section>
 
 <section id="resultScreen" class="screen">
-
-<div class="title">
-🏁 Ziel!
-</div>
-
-<div id="resultPosition" class="resultPos">
-1.
-</div>
-
+<div class="title">🏁 Ziel!</div>
+<div id="resultPosition" class="resultPos">1.</div>
 <div id="resultText" class="subtitle"></div>
-
 <div class="grid">
-
-<button class="menuBtn primary" onclick="startSession('race')">
-🔄 Nochmal
-</button>
-
-<button class="menuBtn" onclick="showScreen('homeScreen')">
-🏠 Hauptmenü
-</button>
-
+<button class="menuBtn primary" onclick="startSession('race')">🔄 Nochmal</button>
+<button class="menuBtn" onclick="showScreen('homeScreen')">🏠 Hauptmenü</button>
 </div>
-
 </section>
 
 <script>
@@ -939,35 +290,36 @@ const minimap=$("minimap");
 const mctx=minimap.getContext("2d");
 
 let W=innerWidth,H=innerHeight;
-
 let rawDrawing=[];
 let center=[];
-
+let drawMode="freehand";
+let trackWidth=12;
+let hillLevel=1;
+let smoothLevel=1;
 let stabilizing=false;
 let drawing=false;
-let drawMode="free";
 
 let savedTracks=loadTracks();
 let currentTrack=savedTracks[0]||null;
 
 let selectedCar=0;
 let sessionType="race";
-
 let running=false;
 let paused=false;
 
 let player=null;
 let aiCars=[];
 
-let difficulty=2;
 let totalLaps=5;
-
 let raceStartTime=0;
 let currentLapStart=0;
 let lastLapTime=0;
 let bestLapTime=0;
-
 let lastFrame=0;
+
+let previousIdx=0;
+let lapCooldown=0;
+let lapArmed=false;
 
 const keys={
 left:false,
@@ -977,91 +329,56 @@ brake:false
 };
 
 const cars=[
-{
-name:"Falcon GT",
-color:"#ffad1f",
-top:230,
-acc:1,
-brake:1,
-grip:1
-},
-{
-name:"Vortex R",
-color:"#45d6c0",
-top:245,
-acc:.96,
-brake:1.04,
-grip:1.08
-},
-{
-name:"Storm X",
-color:"#9c83ff",
-top:260,
-acc:.92,
-brake:.98,
-grip:.95
-},
-{
-name:"Apex RS",
-color:"#ff7188",
-top:250,
-acc:1.04,
-brake:1.02,
-grip:1.02
-}
+{name:"Falcon GT",color:"#ffad1f",top:230,acc:1,brake:1,grip:1},
+{name:"Vortex R",color:"#45d6c0",top:245,acc:.96,brake:1.04,grip:1.08},
+{name:"Storm X",color:"#9c83ff",top:260,acc:.92,brake:.98,grip:.95},
+{name:"Apex RS",color:"#ff7188",top:250,acc:1.04,brake:1.02,grip:1.02}
 ];
 
 function clamp(v,a,b){
-return Math.max(a,Math.min(b,v))
+return Math.max(a,Math.min(b,v));
 }
 
 function lerp(a,b,t){
-return a+(b-a)*t
+return a+(b-a)*t;
 }
 
 function dist(a,b){
-return Math.hypot(a.x-b.x,a.y-b.y)
+return Math.hypot(a.x-b.x,a.y-b.y);
+}
+
+function angleDiff(a,b){
+let d=b-a;
+while(d>Math.PI)d-=Math.PI*2;
+while(d<-Math.PI)d+=Math.PI*2;
+return d;
 }
 
 function loadTracks(){
 try{
-return JSON.parse(
-localStorage.getItem("trackforge_tracks")||"[]"
-)
+return JSON.parse(localStorage.getItem("trackforge_tracks")||"[]");
 }catch(e){
-return[]
+return[];
 }
 }
 
 function saveTracks(){
 try{
-localStorage.setItem(
-"trackforge_tracks",
-JSON.stringify(savedTracks)
-)
+localStorage.setItem("trackforge_tracks",JSON.stringify(savedTracks));
 }catch(e){}
 }
 
 function showScreen(id){
-
-document.querySelectorAll(".screen")
-.forEach(s=>s.classList.remove("active"));
-
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
 $(id).classList.add("active");
-
 }
 
 function formatTime(ms){
-
-if(!Number.isFinite(ms))
-return "—:—.———";
-
+if(!Number.isFinite(ms))return"—:—.———";
 const sec=Math.floor(ms/1000);
 const min=Math.floor(sec/60);
 const milli=Math.floor(ms%1000);
-
 return `${min}:${String(sec%60).padStart(2,"0")}.${String(milli).padStart(3,"0")}`;
-
 }
 
 /* GARAGE */
@@ -1071,57 +388,28 @@ function openGarage(){
 showScreen("garageScreen");
 
 const g=$("carGrid");
-
 g.innerHTML="";
 
 cars.forEach((car,i)=>{
 
 const d=document.createElement("div");
 
-d.className=
-"carCard"+
-(selectedCar===i?" selected":"");
+d.className="carCard"+(selectedCar===i?" selected":"");
 
 d.onclick=()=>{
 selectedCar=i;
-openGarage()
+openGarage();
 };
 
 d.innerHTML=`
-
-<div class="carPreview"
-style="background:${car.color}">
-</div>
-
+<div class="carPreview" style="background:${car.color}"></div>
 <b>${car.name}</b>
-
-<div class="small">
-Top Speed
-</div>
-
-<div class="stat">
-<i style="width:${clamp(car.top/2.7,0,100)}%">
-</i>
-</div>
-
-<div class="small">
-Beschleunigung
-</div>
-
-<div class="stat">
-<i style="width:${clamp(car.acc*85,0,100)}%">
-</i>
-</div>
-
-<div class="small">
-Grip
-</div>
-
-<div class="stat">
-<i style="width:${clamp(car.grip*82,0,100)}%">
-</i>
-</div>
-
+<div class="small">Top Speed</div>
+<div class="stat"><i style="width:${clamp(car.top/2.7,0,100)}%"></i></div>
+<div class="small">Beschleunigung</div>
+<div class="stat"><i style="width:${clamp(car.acc*85,0,100)}%"></i></div>
+<div class="small">Grip</div>
+<div class="stat"><i style="width:${clamp(car.grip*82,0,100)}%"></i></div>
 `;
 
 g.appendChild(d);
@@ -1139,10 +427,7 @@ const dpr=Math.min(2,devicePixelRatio||1);
 canvas.width=Math.max(1,Math.floor(w*dpr));
 canvas.height=Math.max(1,Math.floor(h*dpr));
 
-context.setTransform(
-dpr,0,0,dpr,0,0
-);
-
+context.setTransform(dpr,0,0,dpr,0,0);
 }
 
 function resizeDrawCanvas(){
@@ -1158,7 +443,6 @@ r.height
 
 if(rawDrawing.length)
 redrawDrawing();
-
 }
 
 function resizeGameCanvas(){
@@ -1166,12 +450,7 @@ function resizeGameCanvas(){
 W=innerWidth;
 H=innerHeight;
 
-resizeCanvas(
-gameCanvas,
-ctx,
-W,
-H
-);
+resizeCanvas(gameCanvas,ctx,W,H);
 
 resizeCanvas(
 minimap,
@@ -1179,16 +458,12 @@ mctx,
 minimap.clientWidth||180,
 minimap.clientHeight||180
 );
-
 }
 
-addEventListener(
-"resize",
-()=>{
+addEventListener("resize",()=>{
 resizeDrawCanvas();
 resizeGameCanvas();
-}
-);
+});
 
 /* DRAW */
 
@@ -1197,65 +472,31 @@ function openDraw(){
 showScreen("drawScreen");
 
 setTimeout(()=>{
-
 resizeDrawCanvas();
 clearDrawing();
-
 },30);
-
-}
-
-function setDrawMode(mode){
-
-drawMode=mode;
-
-$("freeMode").classList.toggle(
-"active",
-mode==="free"
-);
-
-$("dotMode").classList.toggle(
-"active",
-mode==="dots"
-);
 
 }
 
 function getDrawPoint(e){
 
-const r=
-drawCanvas.getBoundingClientRect();
+const r=drawCanvas.getBoundingClientRect();
 
 return{
-x:clamp(
-e.clientX-r.left,
-0,
-r.width
-),
-
-y:clamp(
-e.clientY-r.top,
-0,
-r.height
-)
+x:clamp(e.clientX-r.left,0,r.width),
+y:clamp(e.clientY-r.top,0,r.height)
 };
-
 }
 
 function addDrawPoint(p){
 
-const last=
-rawDrawing[rawDrawing.length-1];
+const last=rawDrawing[rawDrawing.length-1];
 
-if(
-last &&
-dist(last,p)<3
-)return;
+if(last&&dist(last,p)<3)return;
 
 rawDrawing.push(p);
 
 redrawDrawing();
-
 }
 
 function redrawDrawing(){
@@ -1265,115 +506,133 @@ const h=drawCanvas.clientHeight;
 
 dctx.clearRect(0,0,w,h);
 
-if(rawDrawing.length<2)
-return;
+if(rawDrawing.length<2)return;
 
 dctx.beginPath();
 
 rawDrawing.forEach((p,i)=>{
-
-if(i)
-dctx.lineTo(p.x,p.y);
-else
-dctx.moveTo(p.x,p.y);
-
+if(i)dctx.lineTo(p.x,p.y);
+else dctx.moveTo(p.x,p.y);
 });
 
-dctx.lineWidth=7;
 dctx.lineCap="round";
 dctx.lineJoin="round";
-dctx.strokeStyle="#ffad1f";
+dctx.lineWidth=clamp(trackWidth*3,24,60);
+dctx.strokeStyle="#d9dde0";
 dctx.stroke();
-
-if(rawDrawing.length>15){
-
-const f=rawDrawing[0];
-const l=rawDrawing[rawDrawing.length-1];
 
 dctx.beginPath();
 
-dctx.moveTo(l.x,l.y);
-dctx.lineTo(f.x,f.y);
+rawDrawing.forEach((p,i)=>{
+if(i)dctx.lineTo(p.x,p.y);
+else dctx.moveTo(p.x,p.y);
+});
 
-dctx.setLineDash([7,9]);
+dctx.lineWidth=clamp(trackWidth*2.25,18,46);
+dctx.strokeStyle="#30363a";
+dctx.stroke();
+
+dctx.beginPath();
+
+rawDrawing.forEach((p,i)=>{
+if(i)dctx.lineTo(p.x,p.y);
+else dctx.moveTo(p.x,p.y);
+});
+
+dctx.lineWidth=2.5;
+dctx.strokeStyle="#f5b72d";
+dctx.setLineDash([10,9]);
+dctx.stroke();
+dctx.setLineDash([]);
+
+const f=rawDrawing[0];
+
+dctx.fillStyle="#fff";
+dctx.beginPath();
+dctx.arc(f.x,f.y,9,0,Math.PI*2);
+dctx.fill();
+
+if(rawDrawing.length>8){
+
+const l=rawDrawing[rawDrawing.length-1];
+
+dctx.strokeStyle=
+dist(f,l)<35
+?"#51d88a"
+:"#7d8990";
 
 dctx.lineWidth=3;
 
-dctx.strokeStyle="#fff";
-
+dctx.beginPath();
+dctx.arc(f.x,f.y,18,0,Math.PI*2);
 dctx.stroke();
 
-dctx.setLineDash([]);
-
 }
 
 }
 
-drawCanvas.addEventListener(
-"pointerdown",
-e=>{
+drawCanvas.addEventListener("pointerdown",e=>{
 
-if(stabilizing)
-return;
+if(stabilizing)return;
 
-drawing=true;
-
-if(drawMode==="free")
-rawDrawing=[];
-
-addDrawPoint(
-getDrawPoint(e)
-);
-
-try{
-drawCanvas.setPointerCapture(
-e.pointerId
-)
-}catch(_){}
-
-}
-);
-
-drawCanvas.addEventListener(
-"pointermove",
-e=>{
-
-if(
-drawing &&
-!stabilizing &&
-drawMode==="free"
-){
-
-addDrawPoint(
-getDrawPoint(e)
-);
-
-}
-
-}
-);
-
-drawCanvas.addEventListener(
-"pointerup",
-e=>{
-
-drawing=false;
+const p=getDrawPoint(e);
 
 if(drawMode==="dots"){
-addDrawPoint(
-getDrawPoint(e)
-);
+
+if(
+rawDrawing.length>8 &&
+dist(rawDrawing[0],p)<30
+){
+
+rawDrawing.push({...rawDrawing[0]});
+redrawDrawing();
+finishDrawing();
+return;
 }
 
+addDrawPoint(p);
+return;
 }
-);
 
-drawCanvas.addEventListener(
-"pointercancel",
-()=>{
-drawing=false
+drawing=true;
+rawDrawing=[];
+addDrawPoint(p);
+
+try{
+drawCanvas.setPointerCapture(e.pointerId);
+}catch(_){}
+
+});
+
+drawCanvas.addEventListener("pointermove",e=>{
+
+if(!drawing||stabilizing)return;
+
+const p=getDrawPoint(e);
+
+if(
+rawDrawing.length>18 &&
+dist(rawDrawing[0],p)<28
+){
+
+rawDrawing.push({...rawDrawing[0]});
+drawing=false;
+redrawDrawing();
+finishDrawing();
+return;
 }
-);
+
+addDrawPoint(p);
+
+});
+
+drawCanvas.addEventListener("pointerup",()=>{
+drawing=false;
+});
+
+drawCanvas.addEventListener("pointercancel",()=>{
+drawing=false;
+});
 
 function clearDrawing(){
 
@@ -1383,33 +642,27 @@ center=[];
 $("stabilizePanel").style.display="none";
 
 redrawDrawing();
-
 }
 
-function updateBuilderSetting(){
+function finishDrawing(){
 
-const rw=
-["NARROW","NORMAL","WIDE"][
-+$("roadWidth").value
-];
+if(stabilizing)return;
 
-const hills=
-["FLAT","ROLLING","HILLY"][
-+$("hills").value
-];
+if(rawDrawing.length<20){
 
-const smooth=
-["LOOSE","NORMAL","SMOOTH"][
-+$("smooth").value
-];
+alert("Zeichne zuerst eine etwas längere Strecke.");
 
-$("roadWidthLabel").textContent=rw;
-$("hillsLabel").textContent=hills;
-$("smoothLabel").textContent=smooth;
-
+return;
 }
 
-/* TRACK BUILD */
+stabilizing=true;
+
+$("stabilizePanel").style.display="block";
+
+const track=buildSmoothTrack(rawDrawing);
+
+animateStabilization(track);
+}
 
 function buildSmoothTrack(points){
 
@@ -1418,13 +671,16 @@ points
 .filter((_,i)=>i%2===0)
 .map(p=>({...p}));
 
-if(pts.length<8)
-return pts;
+if(pts.length<8)return pts;
 
 let result=pts;
 
 const passes=
-+$("smooth").value+1;
+smoothLevel===0
+?1
+:smoothLevel===1
+?3
+:5;
 
 for(let pass=0;pass<passes;pass++){
 
@@ -1433,26 +689,23 @@ const next=[];
 for(let i=0;i<result.length;i++){
 
 const prev=
-result[
-(i-1+result.length)%
-result.length
-];
+result[(i-1+result.length)%result.length];
 
 const cur=result[i];
 
 const n=
-result[
-(i+1)%result.length
-];
+result[(i+1)%result.length];
+
+const amount=
+smoothLevel===0
+?.12
+:smoothLevel===1
+?.25
+:.34;
 
 next.push({
-x:cur.x*.5+
-prev.x*.25+
-n.x*.25,
-
-y:cur.y*.5+
-prev.y*.25+
-n.y*.25
+x:cur.x*(1-amount)+prev.x*amount/2+n.x*amount/2,
+y:cur.y*(1-amount)+prev.y*amount/2+n.y*amount/2
 });
 
 }
@@ -1466,11 +719,7 @@ const spaced=[];
 for(let i=0;i<result.length;i++){
 
 const a=result[i];
-
-const b=
-result[
-(i+1)%result.length
-];
+const b=result[(i+1)%result.length];
 
 const d=dist(a,b);
 
@@ -1482,11 +731,8 @@ for(let j=0;j<amount;j++){
 const t=j/amount;
 
 spaced.push({
-
 x:lerp(a.x,b.x,t),
-
 y:lerp(a.y,b.y,t)
-
 });
 
 }
@@ -1494,106 +740,184 @@ y:lerp(a.y,b.y,t)
 }
 
 return spaced;
+}
 
+function setDrawMode(mode,el){
+
+drawMode=mode;
+
+document.querySelectorAll(".mode")
+.forEach(x=>x.classList.remove("active"));
+
+el.classList.add("active");
+
+$("drawHint").textContent=
+mode==="dots"
+?"Tap points around the circuit. Close the loop at the first dot."
+:"Draw a closed loop. The start becomes the start line.";
+}
+
+function updateBuilderSetting(){
+
+trackWidth=+$("widthSlider").value;
+hillLevel=+$("hillSlider").value;
+smoothLevel=+$("smoothSlider").value;
+
+$("widthValue").textContent=
+trackWidth+" m";
+
+$("hillValue").textContent=
+["Flat","Rolling","Hilly"][hillLevel];
+
+$("smoothValue").textContent=
+["Loose","Normal","Smooth"][smoothLevel];
+
+redrawDrawing();
+}
+
+$("widthSlider").addEventListener("input",updateBuilderSetting);
+$("hillSlider").addEventListener("input",updateBuilderSetting);
+$("smoothSlider").addEventListener("input",updateBuilderSetting);
+
+function drawStabilizedPreview(track,count){
+
+const w=drawCanvas.clientWidth;
+const h=drawCanvas.clientHeight;
+
+dctx.clearRect(0,0,w,h);
+
+if(count<2)return;
+
+function draw(width,color){
+
+dctx.beginPath();
+
+for(let i=0;i<count;i++){
+
+if(i)dctx.lineTo(track[i].x,track[i].y);
+else dctx.moveTo(track[i].x,track[i].y);
+
+}
+
+dctx.closePath();
+dctx.lineWidth=width;
+dctx.lineCap="round";
+dctx.lineJoin="round";
+dctx.strokeStyle=color;
+dctx.stroke();
+}
+
+draw(34,"#3d464c");
+draw(22,"#171d22");
+}
+
+function calculateTrackLength(track){
+
+let n=0;
+
+for(let i=1;i<track.length;i++)
+n+=dist(track[i],track[i-1]);
+
+if(track.length>1)
+n+=dist(track[0],track[track.length-1]);
+
+return n;
 }
 
 function animateStabilization(track){
 
-const panel=$("stabilizePanel");
-
-panel.style.display="block";
-
 const bar=$("stabilizeBar");
+let frame=0;
 
-let start=null;
-
-function step(t){
-
-if(!start)
-start=t;
-
-const p=
-Math.min(
-1,
-(t-start)/900
-);
+function step(){
 
 bar.style.width=
-(p*100)+"%";
+clamp(
+frame/Math.max(1,track.length)*100,
+0,
+100
+)+"%";
 
-if(p<1){
+drawStabilizedPreview(
+track,
+Math.floor(frame)
+);
+
+frame+=4;
+
+if(frame<=track.length){
 
 requestAnimationFrame(step);
 
 }else{
 
-center=track;
+setTimeout(()=>{
 
-savedTracks.unshift({
-name:"My Track",
-points:center
-});
+const length=calculateTrackLength(track);
 
-savedTracks=savedTracks.slice(
-0,
-10
-);
+const km=
+clamp(length*.0085,.6,25);
+
+$("stabilizeText").textContent=
+"✓ Strecke stabilisiert";
+
+$("lengthResult").textContent=
+`Streckenlänge: ${km.toFixed(3)} km`;
+
+currentTrack={
+id:Date.now(),
+name:"Meine Strecke "+(savedTracks.length+1),
+points:track.map(p=>({...p})),
+length:km,
+width:trackWidth,
+hills:hillLevel,
+smoothing:smoothLevel
+};
+
+savedTracks=
+[currentTrack,...savedTracks].slice(0,10);
 
 saveTracks();
-
-currentTrack=
-savedTracks[0];
+updateHomeInfo();
 
 stabilizing=false;
 
-$("lengthResult").textContent=
-"Streckenlänge: "+
-Math.round(center.length*3.7)+
-" m";
-
 setTimeout(()=>{
-
-panel.style.display="none";
-
 openWeekend();
+},350);
 
-},500);
-
-}
-
-}
-
-requestAnimationFrame(step);
+},250);
 
 }
 
-function finishDrawing(){
+}
 
-if(stabilizing)
-return;
+step();
+}
 
-if(rawDrawing.length<20){
+/* TRACK LIST */
 
-alert(
-"Zeichne zuerst eine längere Strecke."
+function updateHomeInfo(){
+
+$("homeTrackInfo").textContent=
+currentTrack
+?`${currentTrack.name} • ${Number(currentTrack.length).toFixed(3)} km`
+:"Noch keine Strecke erstellt.";
+}
+
+function escapeHtml(s){
+
+return String(s).replace(
+/[&<>"']/g,
+c=>({
+"&":"&amp;",
+"<":"&lt;",
+">":"&gt;",
+'"':"&quot;",
+"'":"&#039;"
+}[c])
 );
-
-return;
-
 }
-
-stabilizing=true;
-
-const track=
-buildSmoothTrack(
-rawDrawing
-);
-
-animateStabilization(track);
-
-}
-
-/* TRACKS */
 
 function showTracks(){
 
@@ -1607,66 +931,34 @@ if(!savedTracks.length){
 
 list.innerHTML=
 `<div class="card">
-Noch keine Strecken erstellt.
+<b>Noch keine Strecken.</b>
+<div class="small">Zeichne zuerst deine erste Strecke.</div>
 </div>`;
 
 return;
-
 }
 
-savedTracks.forEach((t,i)=>{
+savedTracks.forEach(track=>{
 
-const card=
-document.createElement("div");
+const div=document.createElement("div");
 
-card.className="card";
+div.className="card";
 
-card.innerHTML=`
-
-<b>${t.name||"My Track"}</b>
-
-<div class="small">
-${Math.round(t.points.length*3.7)} m
-</div>
-
-<button
-class="primary"
-style="margin-top:12px;width:100%"
->
-FAHREN →
-</button>
-
+div.innerHTML=`
+<b>${escapeHtml(track.name)}</b>
+<div class="small">${Number(track.length).toFixed(3)} km</div>
+<div style="height:10px"></div>
+<button class="primary">Strecke fahren</button>
 `;
 
-card.querySelector("button").onclick=()=>{
-
-currentTrack=t;
-center=t.points;
+div.querySelector("button").onclick=()=>{
+currentTrack=track;
 openWeekend();
-
 };
 
-list.appendChild(card);
+list.appendChild(div);
 
 });
-
-}
-
-function updateHomeInfo(){
-
-const el=$("homeTrackInfo");
-
-if(currentTrack){
-
-el.textContent=
-`${currentTrack.name} · ${Math.round(currentTrack.points.length*3.7)} m`;
-
-}else{
-
-el.textContent=
-"Noch keine Strecke erstellt.";
-
-}
 
 }
 
@@ -1674,133 +966,194 @@ function openWeekend(){
 
 showScreen("weekendScreen");
 
-if(currentTrack){
-
 $("weekendTrack").textContent=
-currentTrack.name||"My Track";
+currentTrack
+?currentTrack.name
+:"Keine Strecke ausgewählt";
 
 $("weekendLength").textContent=
-Math.round(currentTrack.points.length*3.7)+
-" m";
-
-}else{
-
-$("weekendTrack").textContent=
-"Keine Strecke";
-
-$("weekendLength").textContent="";
-
+currentTrack
+?`${Number(currentTrack.length).toFixed(3)} km`
+:"Bitte zuerst eine Strecke zeichnen.";
 }
 
-}
+/* GAME TRACK */
 
-/* TRACK MATH */
+function normalizeTrackForGame(points){
+
+if(!points||points.length<8)return[];
+
+const xs=points.map(p=>p.x);
+const ys=points.map(p=>p.y);
+
+const minX=Math.min(...xs);
+const maxX=Math.max(...xs);
+const minY=Math.min(...ys);
+const maxY=Math.max(...ys);
+
+const tw=Math.max(1,maxX-minX);
+const th=Math.max(1,maxY-minY);
+
+const scale=
+Math.min(
+(W-170)/tw,
+(H-300)/th
+);
+
+const cx=(minX+maxX)/2;
+const cy=(minY+maxY)/2;
+
+return points.map(p=>({
+
+x:(p.x-cx)*scale+W/2,
+y:(p.y-cy)*scale+H/2
+
+}));
+
+}
 
 function pointAt(i){
 
 if(!center.length)
-return{x:0,y:0};
+return{x:W/2,y:H/2};
 
-i=
-Math.floor(i)%center.length;
+const n=center.length;
 
-if(i<0)
-i+=center.length;
-
-return center[i];
-
+return center[
+((Math.floor(i)%n)+n)%n
+];
 }
 
 function tangentAt(i){
 
-const a=
-pointAt(i-2);
+if(center.length<2)return 0;
 
-const b=
-pointAt(i+2);
+const a=pointAt(i-5);
+const b=pointAt(i+5);
 
 return Math.atan2(
 b.y-a.y,
 b.x-a.x
 );
-
 }
 
-function cameraTransform(p,angle,cx,cy){
+function nearestOnTrack(x,y,start=0,range=120){
 
-const dx=p.x-cx;
-const dy=p.y-cy;
+let best={
+i:0,
+d:Infinity,
+x:W/2,
+y:H/2
+};
 
-const c=Math.cos(-angle);
-const s=Math.sin(-angle);
+const n=center.length;
 
-return{
+if(n<2)return best;
 
-lateral:
-dx*c-dy*s,
+for(let o=-range;o<=range;o++){
 
-forward:
-dx*s+dy*c
+const i=
+((start+o)%n+n)%n;
 
+const p=center[i];
+
+const d=
+Math.hypot(
+x-p.x,
+y-p.y
+);
+
+if(d<best.d){
+
+best={
+i,
+d,
+x:p.x,
+y:p.y
 };
 
 }
 
-/* RACE START */
+}
+
+return best;
+}
+
+function calculateCurve(index){
+
+if(center.length<30)return 0;
+
+return clamp(
+Math.abs(
+angleDiff(
+tangentAt(index),
+tangentAt(index+24)
+)
+/1.6,
+0,
+1
+);
+}
+
+/* SESSION */
 
 function startSession(type){
 
-if(!currentTrack){
+if(
+!currentTrack||
+!Array.isArray(currentTrack.points)||
+currentTrack.points.length<8
+){
 
 alert(
-"Erstelle zuerst eine Strecke."
+"Bitte zuerst eine gültige Strecke zeichnen."
 );
 
 return;
-
 }
-
-center=currentTrack.points;
 
 sessionType=type;
 
-running=true;
-paused=false;
+resizeGameCanvas();
+
+center=
+normalizeTrackForGame(
+currentTrack.points
+);
+
+if(center.length<8){
+
+alert(
+"Die Strecke ist zu klein."
+);
+
+return;
+}
+
+const s=pointAt(0);
+const a=tangentAt(0);
 
 player={
-
-idx:0,
+x:s.x,
+y:s.y,
+angle:a,
 speed:0,
-x:center[0].x,
-y:center[0].y,
+idx:0,
 lap:0,
-carIndex:selectedCar
-
+steer:0,
+carIndex:selectedCar,
+offTrack:0,
+progress:0
 };
 
-aiCars=[];
+previousIdx=0;
+lapCooldown=0;
+lapArmed=false;
 
-for(let i=0;i<4;i++){
+createAI();
 
-aiCars.push({
-
-idx:
-Math.max(
-0,
-i*18-25
-),
-
-speed:
-1.6+i*.12,
-
-color:
-cars[
-(i+1)%cars.length
-].color
-
-});
-
-}
+running=true;
+paused=false;
 
 raceStartTime=
 performance.now();
@@ -1813,7 +1166,11 @@ bestLapTime=0;
 
 showScreen("gameScreen");
 
-resizeGameCanvas();
+resetRaceHUD();
+
+/* WICHTIG:
+   Strecke sofort zeichnen */
+drawGame();
 
 showBanner(
 type==="training"
@@ -1826,43 +1183,98 @@ type==="training"
 lastFrame=
 performance.now();
 
-requestAnimationFrame(
-gameLoop
-);
+requestAnimationFrame(gameLoop);
 
 }
 
-/* PHYSICS */
+function createAI(){
+
+aiCars=[];
+
+const colors=[
+"#e8e8e8",
+"#45d6c0",
+"#f3bd45",
+"#9c83ff",
+"#ff7188"
+];
+
+for(let i=0;i<5;i++){
+
+const k=18+i*12;
+const p=pointAt(k);
+
+aiCars.push({
+
+x:p.x,
+y:p.y,
+angle:tangentAt(k),
+speed:0,
+idx:k,
+lap:0,
+carIndex:i%cars.length,
+color:colors[i],
+skill:.92+i*.015,
+steer:0,
+laneOffset:
+[-.28,-.12,.1,.27,-.05][i],
+progress:k
+
+});
+
+}
+
+}
+
+/* PLAYER */
 
 function updatePlayer(dt){
 
-const car=
-cars[player.carIndex];
+const car=cars[player.carIndex];
 
-const accelerating=
-keys.gas;
+const near=
+nearestOnTrack(
+player.x,
+player.y,
+player.idx,
+130
+);
 
-const braking=
-keys.brake;
+player.idx=near.i;
 
-if(accelerating){
+const trackAngle=
+tangentAt(player.idx+7);
 
-player.speed+=
-150*car.acc*dt;
+const steerInput=
+(keys.right?1:0)-
+(keys.left?1:0);
 
-}else{
+player.steer+=
+(
+steerInput-player.steer
+)*
+Math.min(1,dt*10);
 
-player.speed-=
-28*dt;
+const throttle=
+keys.gas
+?1
+:(sessionType==="training"?0.55:0);
 
-}
+const brake=
+keys.brake?1:0;
 
-if(braking){
+let target=
+brake
+?0
+:car.top*throttle;
 
-player.speed-=
-220*car.brake*dt;
+target*=
+1-calculateCurve(player.idx)*.28;
 
-}
+if(player.speed<target)
+player.speed+=car.acc*115*dt;
+else
+player.speed-=car.brake*75*dt;
 
 player.speed=
 clamp(
@@ -1871,111 +1283,318 @@ player.speed,
 car.top
 );
 
-let steer=0;
+const desired=
+trackAngle+
+player.steer*
+(
+.48+
+.55*
+(1-player.speed/car.top)
+);
 
-if(keys.left)
-steer-=1;
+player.angle+=
+angleDiff(
+player.angle,
+desired
+)*
+Math.min(1,dt*7);
 
-if(keys.right)
-steer+=1;
+player.x+=
+Math.cos(player.angle)*
+player.speed*
+.34*
+dt;
 
-if(steer){
+player.y+=
+Math.sin(player.angle)*
+player.speed*
+.34*
+dt;
 
-const turn=
-0.8+
-player.speed/car.top*.9;
+const n2=
+nearestOnTrack(
+player.x,
+player.y,
+player.idx,
+130
+);
 
-player.idx+=
-steer*
-turn*
-dt*
-7;
+player.idx=n2.i;
+
+player.progress=
+player.lap*center.length+
+player.idx;
+
+if(n2.d>58){
+
+player.speed*=
+Math.pow(.88,dt*60);
+
+const pull=
+clamp(
+(n2.d-48)/100,
+0,
+1
+)*
+Math.min(1,dt*2.5);
+
+player.x+=
+(n2.x-player.x)*pull;
+
+player.y+=
+(n2.y-player.y)*pull;
 
 }
 
-player.idx+=
-(player.speed/55)*dt;
+}
 
-player.idx%=
-center.length;
+/* AI */
 
-const p=
-pointAt(player.idx);
+function updateAI(ai,dt){
 
-player.x=p.x;
-player.y=p.y;
+const near=
+nearestOnTrack(
+ai.x,
+ai.y,
+ai.idx,
+120
+);
+
+ai.idx=near.i;
+
+const curve=
+calculateCurve(ai.idx);
+
+const car=
+cars[ai.carIndex];
+
+const target=
+car.top*
+(.94-curve*.36)*
+ai.skill;
+
+ai.speed+=
+(target-ai.speed)*
+Math.min(1,dt*4.5);
+
+const look=
+Math.floor(
+13+ai.speed*.045
+);
+
+const tp=
+pointAt(ai.idx+look);
+
+const tan=
+tangentAt(ai.idx+look);
+
+const nx=-Math.sin(tan);
+const ny=Math.cos(tan);
+
+const lane=
+ai.laneOffset*32;
+
+const tx=tp.x+nx*lane;
+const ty=tp.y+ny*lane;
+
+const wanted=
+Math.atan2(
+ty-ai.y,
+tx-ai.x
+);
+
+const err=
+angleDiff(
+ai.angle,
+wanted
+);
+
+ai.steer+=
+(
+clamp(err*1.7,-.7,.7)-
+ai.steer
+)*
+Math.min(1,dt*8);
+
+ai.angle+=
+ai.steer*
+1.15*
+dt;
+
+ai.x+=
+Math.cos(ai.angle)*
+ai.speed*
+.34*
+dt;
+
+ai.y+=
+Math.sin(ai.angle)*
+ai.speed*
+.34*
+dt;
+
+ai.progress=
+ai.lap*center.length+
+ai.idx;
 
 }
 
-function updateAI(a,dt){
-
-a.idx+=
-a.speed*dt*
-3.3;
-
-a.idx%=
-center.length;
-
-}
+/* LAPS */
 
 function updateLaps(){
 
+const n=center.length;
+
+if(!n)return;
+
+/*
+  Die Startlinie darf erst nach mindestens
+  35% der Strecke zählen.
+*/
+if(player.idx>n*.35)
+lapArmed=true;
+
+if(lapCooldown>0){
+
+lapCooldown--;
+
+previousIdx=player.idx;
+
+return;
+}
+
 if(
-player.idx<3 &&
-player.speed>40
+lapArmed &&
+previousIdx>n*.82 &&
+player.idx<n*.18
 ){
+
+const lapTime=
+performance.now()-
+currentLapStart;
+
+lastLapTime=lapTime;
+
+bestLapTime=
+!bestLapTime
+?lapTime
+:Math.min(bestLapTime,lapTime);
+
+currentLapStart=
+performance.now();
 
 player.lap++;
 
-if(
-player.lap>=totalLaps
-){
+lapCooldown=45;
+lapArmed=false;
+
+updateLapTimes();
+
+if(player.lap>=totalLaps){
+
+finishRace();
+
+return;
+
+}
+
+}
+
+previousIdx=player.idx;
+
+}
+
+function getPosition(){
+
+const all=
+[player,...aiCars]
+.slice()
+.sort(
+(a,b)=>
+(b.progress||0)-
+(a.progress||0)
+);
+
+return all.indexOf(player)+1;
+}
+
+function resetRaceHUD(){
+
+$("currentTime").textContent="0:00.000";
+$("lastTime").textContent="—:—.———";
+$("bestTime").textContent="—:—.———";
+$("lapNumber").textContent="1";
+
+$("s1").textContent="—.——";
+$("s2").textContent="—.——";
+$("s3").textContent="—.——";
+
+}
+
+function updateLapTimes(){
+
+$("lastTime").textContent=
+formatTime(lastLapTime);
+
+$("bestTime").textContent=
+formatTime(bestLapTime);
+
+}
+
+function finishRace(){
 
 running=false;
 
-$("resultPosition")
-.textContent="1.";
+const pos=getPosition();
 
-$("resultText")
-.textContent=
-"Rennen beendet!";
+$("resultPosition").textContent=
+pos+".";
 
-showScreen(
-"resultScreen"
-);
+$("resultText").textContent=
+`Du hast das Rennen beendet. Rundenzeit: ${formatTime(lastLapTime)}`;
 
-}
-
-}
+setTimeout(()=>{
+showScreen("resultScreen");
+},300);
 
 }
 
-/* DRAW WORLD */
+/* CAMERA */
+
+function cameraTransform(
+p,
+camAngle,
+camX,
+camY
+){
+
+const dx=p.x-camX;
+const dy=p.y-camY;
+
+const c=Math.cos(camAngle);
+const s=Math.sin(camAngle);
+
+return{
+forward:dx*c+dy*s,
+lateral:-dx*s+dy*c
+};
+
+}
+
+/* WORLD */
 
 function drawSky(){
 
-const horizon=
-H*.39;
+const horizon=H*.39;
 
 const g=
 ctx.createLinearGradient(
 0,0,0,horizon
 );
 
-g.addColorStop(
-0,
-"#8eafc1"
-);
-
-g.addColorStop(
-.58,
-"#a9c5ce"
-);
-
-g.addColorStop(
-1,
-"#c5d7d9"
-);
+g.addColorStop(0,"#8eafc1");
+g.addColorStop(.58,"#a9c5ce");
+g.addColorStop(1,"#c5d7d9");
 
 ctx.fillStyle=g;
 
@@ -1987,60 +1606,40 @@ ctx.fillStyle="#7395a4";
 
 ctx.beginPath();
 
-ctx.moveTo(
-0,horizon
-);
+ctx.moveTo(0,horizon);
 
-ctx.lineTo(
-0,horizon-48
-);
-
-ctx.lineTo(
-W*.10,horizon-30
-);
-
-ctx.lineTo(
-W*.19,horizon-69
-);
-
-ctx.lineTo(
-W*.28,horizon-28
-);
-
-ctx.lineTo(
-W*.39,horizon-81
-);
-
-ctx.lineTo(
-W*.50,horizon-32
-);
-
-ctx.lineTo(
-W*.59,horizon-83
-);
-
-ctx.lineTo(
-W*.69,horizon-33
-);
-
-ctx.lineTo(
-W*.78,horizon-70
-);
-
-ctx.lineTo(
-W*.88,horizon-31
-);
-
-ctx.lineTo(
-W,horizon-57
-);
-
-ctx.lineTo(
-W,horizon
-);
+ctx.lineTo(0,horizon-48);
+ctx.lineTo(W*.10,horizon-30);
+ctx.lineTo(W*.19,horizon-69);
+ctx.lineTo(W*.28,horizon-28);
+ctx.lineTo(W*.39,horizon-81);
+ctx.lineTo(W*.50,horizon-32);
+ctx.lineTo(W*.59,horizon-83);
+ctx.lineTo(W*.69,horizon-33);
+ctx.lineTo(W*.78,horizon-70);
+ctx.lineTo(W*.88,horizon-31);
+ctx.lineTo(W,horizon-57);
+ctx.lineTo(W,horizon);
 
 ctx.closePath();
+ctx.fill();
 
+ctx.fillStyle="#81a4b2";
+
+ctx.beginPath();
+
+ctx.moveTo(0,horizon);
+ctx.lineTo(W*.16,horizon-17);
+ctx.lineTo(W*.30,horizon-55);
+ctx.lineTo(W*.40,horizon-24);
+ctx.lineTo(W*.51,horizon-66);
+ctx.lineTo(W*.64,horizon-20);
+ctx.lineTo(W*.76,horizon-51);
+ctx.lineTo(W*.90,horizon-19);
+ctx.lineTo(W,horizon-41);
+ctx.lineTo(W,horizon);
+
+ctx.closePath();
 ctx.fill();
 
 }
@@ -2050,32 +1649,22 @@ function drawGround(){
 const h=H*.39;
 
 ctx.fillStyle="#347a43";
-
-ctx.fillRect(
-0,h,W,H-h
-);
+ctx.fillRect(0,h,W,H-h);
 
 ctx.fillStyle="#4a8b4e";
-
-ctx.fillRect(
-0,h,W,H*.13
-);
+ctx.fillRect(0,h,W,H*.13);
 
 }
 
 function roadPoint(s){
 
 const p=
-pointAt(
-player.idx+s
-);
+pointAt(player.idx+s);
 
 const q=
 cameraTransform(
 p,
-tangentAt(
-player.idx+5
-),
+tangentAt(player.idx+5),
 player.x,
 player.y
 );
@@ -2084,24 +1673,14 @@ const z=
 q.forward*1.02+16;
 
 return{
-
-x:
-W/2+
-q.lateral*(650/z),
-
-y:
-H*.405+
-142000/(z+245),
-
-half:
-clamp(
+x:W/2+q.lateral*(650/z),
+y:H*.405+142000/(z+245),
+half:clamp(
 370000/(z+470)+42,
 48,
 W*1.5
 ),
-
 z
-
 };
 
 }
@@ -2125,24 +1704,10 @@ s<maxS;
 s+=2
 ){
 
-const q=
-roadPoint(s);
+const q=roadPoint(s);
 
 if(q.z>0)
 segments.push(q);
-
-}
-
-for(
-let i=segments.length-1;
-i>0;
-i--
-){
-
-drawRoadQuad(
-segments[i],
-segments[i-1]
-);
 
 }
 
@@ -2164,16 +1729,10 @@ near.x+near.half,
 near.y
 );
 
-ctx.lineTo(
-W,H
-);
-
-ctx.lineTo(
-0,H
-);
+ctx.lineTo(W,H);
+ctx.lineTo(0,H);
 
 ctx.closePath();
-
 ctx.fill();
 
 for(
@@ -2218,35 +1777,24 @@ b.y
 );
 
 ctx.closePath();
-
 ctx.fill();
 
 const ca=
-clamp(
-a.half*.085,
-3,
-45
-);
+clamp(a.half*.085,3,45);
 
 const cb=
-clamp(
-b.half*.085,
-3,
-45
-);
+clamp(b.half*.085,3,45);
 
 const stripe=
 Math.floor(a.z/18)%2===0;
 
 drawStrip(
-a,b,-1,
-ca,cb,
+a,b,-1,ca,cb,
 stripe?"#e5453e":"#f4f4f1"
 );
 
 drawStrip(
-a,b,1,
-ca,cb,
+a,b,1,ca,cb,
 stripe?"#e5453e":"#f4f4f1"
 );
 
@@ -2307,17 +1855,14 @@ b.y
 }
 
 ctx.closePath();
-
 ctx.fill();
 
 }
 
-function drawBarriersAndAds(){
+function drawBarriers(){
 
 const camAngle=
-tangentAt(
-player.idx+5
-);
+tangentAt(player.idx+5);
 
 for(
 let s=12;
@@ -2326,9 +1871,7 @@ s+=6
 ){
 
 const p=
-pointAt(
-player.idx+s
-);
+pointAt(player.idx+s);
 
 const q=
 cameraTransform(
@@ -2338,14 +1881,11 @@ player.x,
 player.y
 );
 
-if(q.forward<8)
-continue;
+if(q.forward<8)continue;
 
-const z=
-q.forward*1.02+20;
+const z=q.forward*1.02+20;
 
-const scale=
-610/z;
+const scale=610/z;
 
 const y=
 H*.405+
@@ -2377,7 +1917,7 @@ side*
 (roadHalf+size*.92);
 
 ctx.fillStyle=
-(Math.floor(s/6)%2===0)
+Math.floor(s/6)%2===0
 ?"#164d9a"
 :"#d72f2b";
 
@@ -2398,15 +1938,10 @@ function drawTrees(){
 
 const horizon=H*.40;
 
-for(
-let i=0;
-i<36;
-i++
-){
+for(let i=0;i<36;i++){
 
 const x=
-((i*173-player.idx*1.7)%
-(W+420))-210;
+((i*173-player.idx*1.7)%(W+420))-210;
 
 const size=
 7+(i%6)*4;
@@ -2446,13 +1981,10 @@ ctx.fill();
 
 function drawIdealLine(){
 
-if(!center.length)
-return;
+if(!center.length)return;
 
 const camAngle=
-tangentAt(
-player.idx+5
-);
+tangentAt(player.idx+5);
 
 const pts=[];
 
@@ -2463,9 +1995,7 @@ s+=3
 ){
 
 const p=
-pointAt(
-player.idx+s
-);
+pointAt(player.idx+s);
 
 const q=
 cameraTransform(
@@ -2478,8 +2008,7 @@ player.y
 const z=
 q.forward*1.02+20;
 
-if(z<1)
-continue;
+if(z<1)continue;
 
 pts.push({
 
@@ -2499,10 +2028,7 @@ ctx.strokeStyle=
 "rgba(255,205,55,.55)";
 
 ctx.lineWidth=3;
-
-ctx.setLineDash(
-[7,11]
-);
+ctx.setLineDash([7,11]);
 
 ctx.beginPath();
 
@@ -2516,7 +2042,6 @@ ctx.moveTo(p.x,p.y);
 });
 
 ctx.stroke();
-
 ctx.setLineDash([]);
 
 }
@@ -2524,18 +2049,13 @@ ctx.setLineDash([]);
 function drawAI(){
 
 const camAngle=
-tangentAt(
-player.idx+5
-);
+tangentAt(player.idx+5);
 
 aiCars.forEach(a=>{
 
-const p=
-pointAt(a.idx);
-
 const q=
 cameraTransform(
-p,
+a,
 camAngle,
 player.x,
 player.y
@@ -2544,8 +2064,7 @@ player.y
 if(
 q.forward<20||
 q.forward>900
-)
-return;
+)return;
 
 const z=
 q.forward*1.15+30;
@@ -2577,8 +2096,7 @@ s/80,
 s/80
 );
 
-ctx.fillStyle=
-"rgba(0,0,0,.35)";
+ctx.fillStyle="rgba(0,0,0,.35)";
 
 ctx.beginPath();
 
@@ -2635,8 +2153,7 @@ ctx.save();
 
 ctx.translate(x,y);
 
-ctx.fillStyle=
-"rgba(0,0,0,.38)";
+ctx.fillStyle="rgba(0,0,0,.38)";
 
 ctx.beginPath();
 
@@ -2651,43 +2168,37 @@ Math.PI*2
 
 ctx.fill();
 
+ctx.fillStyle="#111517";
+
+[
+[-s*.31,-s*.02],
+[s*.31,-s*.02],
+[-s*.28,s*.28],
+[s*.28,s*.28]
+].forEach(w=>{
+
+ctx.fillRect(
+w[0]-s*.07,
+w[1]-s*.13,
+s*.14,
+s*.27
+);
+
+});
+
 ctx.fillStyle=
 cars[player.carIndex].color;
 
 ctx.beginPath();
 
-ctx.moveTo(
--s*.25,
--s*.18
-);
-
-ctx.lineTo(
--s*.14,
--s*.42
-);
-
-ctx.lineTo(
-s*.14,
--s*.42
-);
-
-ctx.lineTo(
-s*.25,
--s*.18
-);
-
-ctx.lineTo(
-s*.22,
-s*.31
-);
-
-ctx.lineTo(
--s*.22,
-s*.31
-);
+ctx.moveTo(-s*.25,-s*.18);
+ctx.lineTo(-s*.14,-s*.42);
+ctx.lineTo(s*.14,-s*.42);
+ctx.lineTo(s*.25,-s*.18);
+ctx.lineTo(s*.22,s*.31);
+ctx.lineTo(-s*.22,s*.31);
 
 ctx.closePath();
-
 ctx.fill();
 
 ctx.fillStyle="#2f8ed2";
@@ -2746,19 +2257,15 @@ function drawMinimap(){
 const mw=minimap.clientWidth;
 const mh=minimap.clientHeight;
 
-mctx.clearRect(
-0,0,mw,mh
-);
+mctx.clearRect(0,0,mw,mh);
 
-if(center.length<2)
-return;
+if(center.length<2)return;
 
 const xs=center.map(p=>p.x);
 const ys=center.map(p=>p.y);
 
 const minX=Math.min(...xs);
 const maxX=Math.max(...xs);
-
 const minY=Math.min(...ys);
 const maxY=Math.max(...ys);
 
@@ -2768,12 +2275,8 @@ Math.min(
 (mh-28)/Math.max(1,maxY-minY)
 );
 
-mctx.fillStyle=
-"rgba(20,29,34,.92)";
-
-mctx.fillRect(
-0,0,mw,mh
-);
+mctx.fillStyle="#141d22";
+mctx.fillRect(0,0,mw,mh);
 
 mctx.strokeStyle="#5f686c";
 mctx.lineWidth=12;
@@ -2784,11 +2287,8 @@ mctx.beginPath();
 
 center.forEach((p,i)=>{
 
-const x=
-14+(p.x-minX)*sc;
-
-const y=
-14+(p.y-minY)*sc;
+const x=14+(p.x-minX)*sc;
+const y=14+(p.y-minY)*sc;
 
 if(i)
 mctx.lineTo(x,y);
@@ -2807,11 +2307,8 @@ mctx.beginPath();
 
 center.forEach((p,i)=>{
 
-const x=
-14+(p.x-minX)*sc;
-
-const y=
-14+(p.y-minY)*sc;
+const x=14+(p.x-minX)*sc;
+const y=14+(p.y-minY)*sc;
 
 if(i)
 mctx.lineTo(x,y);
@@ -2823,8 +2320,7 @@ mctx.moveTo(x,y);
 mctx.closePath();
 mctx.stroke();
 
-const p=
-pointAt(player.idx);
+const p=pointAt(player.idx);
 
 mctx.fillStyle="#58aee8";
 
@@ -2844,15 +2340,13 @@ mctx.fill();
 
 function drawGame(){
 
-ctx.clearRect(
-0,0,W,H
-);
+ctx.clearRect(0,0,W,H);
 
 drawSky();
 drawGround();
 drawTrees();
 drawTrackPerspective();
-drawBarriersAndAds();
+drawBarriers();
 drawIdealLine();
 drawAI();
 drawPlayerCar();
@@ -2882,8 +2376,7 @@ performance.now()-raceStartTime
 
 function gameLoop(now){
 
-if(!running)
-return;
+if(!running)return;
 
 const dt=
 Math.min(
@@ -2910,21 +2403,19 @@ drawGame();
 
 }
 
-requestAnimationFrame(
-gameLoop
-);
+requestAnimationFrame(gameLoop);
 
 }
 
-function showBanner(t){
+function showBanner(text){
 
 const b=$("banner");
 
-b.textContent=t;
+b.textContent=text;
 
 setTimeout(()=>{
 
-if(b.textContent===t)
+if(b.textContent===text)
 b.textContent="";
 
 },1800);
@@ -2936,7 +2427,9 @@ function togglePause(){
 paused=!paused;
 
 $("pauseBtn").textContent=
-paused?"▶":"☰";
+paused
+?"▶"
+:"☰";
 
 }
 
@@ -2953,9 +2446,7 @@ e.preventDefault();
 keys[key]=true;
 
 try{
-el.setPointerCapture(
-e.pointerId
-)
+el.setPointerCapture(e.pointerId);
 }catch(_){}
 
 };
@@ -2968,126 +2459,64 @@ keys[key]=false;
 
 };
 
-el.addEventListener(
-"pointerdown",
-down
-);
-
-el.addEventListener(
-"pointerup",
-up
-);
-
-el.addEventListener(
-"pointercancel",
-up
-);
-
-el.addEventListener(
-"pointerleave",
-up
-);
+el.addEventListener("pointerdown",down);
+el.addEventListener("pointerup",up);
+el.addEventListener("pointercancel",up);
+el.addEventListener("pointerleave",up);
 
 }
 
-bindTouch(
-"leftBtn",
-"left"
-);
+bindTouch("leftBtn","left");
+bindTouch("rightBtn","right");
+bindTouch("gasBtn","gas");
+bindTouch("brakeBtn","brake");
 
-bindTouch(
-"rightBtn",
-"right"
-);
-
-bindTouch(
-"gasBtn",
-"gas"
-);
-
-bindTouch(
-"brakeBtn",
-"brake"
-);
-
-addEventListener(
-"keydown",
-e=>{
+addEventListener("keydown",e=>{
 
 const k=e.key.toLowerCase();
 
-if(
-e.key==="ArrowLeft"||
-k==="a"
-)
+if(e.key==="ArrowLeft"||k==="a")
 keys.left=true;
 
-if(
-e.key==="ArrowRight"||
-k==="d"
-)
+if(e.key==="ArrowRight"||k==="d")
 keys.right=true;
 
-if(
-e.key==="ArrowUp"||
-k==="w"
-)
+if(e.key==="ArrowUp"||k==="w")
 keys.gas=true;
 
-if(
-e.key==="ArrowDown"||
-k==="s"
-)
+if(e.key==="ArrowDown"||k==="s")
 keys.brake=true;
 
 if(e.key==="Escape")
 togglePause();
 
-}
-);
+});
 
-addEventListener(
-"keyup",
-e=>{
+addEventListener("keyup",e=>{
 
 const k=e.key.toLowerCase();
 
-if(
-e.key==="ArrowLeft"||
-k==="a"
-)
+if(e.key==="ArrowLeft"||k==="a")
 keys.left=false;
 
-if(
-e.key==="ArrowRight"||
-k==="d"
-)
+if(e.key==="ArrowRight"||k==="d")
 keys.right=false;
 
-if(
-e.key==="ArrowUp"||
-k==="w"
-)
+if(e.key==="ArrowUp"||k==="w")
 keys.gas=false;
 
-if(
-e.key==="ArrowDown"||
-k==="s"
-)
+if(e.key==="ArrowDown"||k==="s")
 keys.brake=false;
 
-}
-);
+});
 
-document.addEventListener(
-"visibilitychange",
-()=>{
+document.addEventListener("visibilitychange",()=>{
 
 if(document.hidden){
 
-keys.left=
-keys.right=
-keys.gas=
+keys.left=false;
+keys.right=false;
+keys.gas=false;
 keys.brake=false;
 
 if(running)
@@ -3095,18 +2524,15 @@ paused=true;
 
 }
 
-}
-);
+});
 
 /* INIT */
 
 resizeDrawCanvas();
 resizeGameCanvas();
-
 updateBuilderSetting();
 updateHomeInfo();
 
 </script>
-
 </body>
 </html>
